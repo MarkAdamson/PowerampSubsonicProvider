@@ -50,7 +50,7 @@ fun PingServer() {
     // Returns a scope that's cancelled when F is removed from composition
     val coroutineScope = rememberCoroutineScope()
 
-    val server = SubsonicServer("https://airsonic.jarknet.uk", "Mark", "UXCL75onal4MgVT3Kbum")
+    val server = SubsonicServer("https://baseURL", "user", "password")
     var (response, setResponse) = remember { mutableStateOf<SubsonicResponse?>(null) }
 
     val getLocationOnClick: () -> Unit = {
