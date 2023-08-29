@@ -1,0 +1,39 @@
+Privacy Policy for Poweramp Subsonic Plugin
+
+Effective Date: 29th August, 2023
+
+1. Introduction
+
+Welcome to the Poweramp Subsonic Plugin! This privacy policy is designed to help you understand how we collect, use, and safeguard your personal information when you use our app. We take your privacy seriously, and we are committed to protecting your data.
+
+2. Data Collection
+
+We collect the following data from users of the Poweramp Subsonic Plugin:
+
+Server Information: Users can enter a URL, username, and password for a Subsonic server they have access to. This information is securely stored on the user's device and is not transmitted to any third-party servers, including ours.
+3. Data Usage
+
+The data collected is used solely for the purpose of connecting to the Subsonic server that you have entered. We do not use this data for any other purposes.
+
+4. Data Deletion
+
+You have the right to delete the data you entered from your device at any time. This can be done within the app's settings.
+
+5. Permissions
+
+The Poweramp Subsonic Plugin app requests the following permission:
+
+INTERNET: This permission is used solely to connect to the Subsonic server you have specified. We do not access or transmit any data to our servers or any third-party servers.
+6. Contact Us
+
+If you have any questions, concerns, or requests regarding your data, this privacy policy, or the Poweramp Subsonic Plugin, you can contact us at:
+
+Email: markadamson83+psp@gmail.com
+
+We are here to assist you and address any privacy-related issues you may have.
+
+7. Changes to this Privacy Policy
+
+We reserve the right to update or modify this privacy policy at any time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Any changes will be posted on this page with an updated "Effective Date."
+
+Please review this privacy policy periodically to stay informed about how we are protecting and managing your data.
