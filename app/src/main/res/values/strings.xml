@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Poweramp Subsonic Provider</string>
+    <string name="title_activity_add_server">AddServerActivity</string>
+    <string name="base_url_hint">Base URL</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="add_server">Add Server</string>
+    <string name="servers">Servers</string>
 </resources>
