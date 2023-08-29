@@ -6,4 +6,5 @@
     <string name="password_hint">Password</string>
     <string name="add_server">Add Server</string>
     <string name="servers">Servers</string>
+    <string name="add_a_server">Add a Server</string>
 </resources>

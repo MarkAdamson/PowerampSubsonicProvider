@@ -6,18 +6,18 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.markadamson83.powerampsubsonicprovider.AddServerActivity
+import com.markadamson83.powerampsubsonicprovider.MainActivity
 import com.markadamson83.powerampsubsonicprovider.R
 
 fun launchAddServerScreen(
-    rule: AndroidComposeTestRule<ActivityScenarioRule<AddServerActivity>, AddServerActivity>,
+    rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
     block: AddServerRobot.() -> Unit
 ): AddServerRobot {
         return AddServerRobot(rule).apply(block)
 }
 
 class AddServerRobot(
-    private val rule: AndroidComposeTestRule<ActivityScenarioRule<AddServerActivity>, AddServerActivity>
+    private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 ) {
     fun typeBaseURL(baseURL: String) {
         val baseURLHint = rule.activity.getString(R.string.base_url_hint)
@@ -47,7 +47,7 @@ class AddServerRobot(
 }
 
 class AddServerVerification(
-    private val rule: AndroidComposeTestRule<ActivityScenarioRule<AddServerActivity>, AddServerActivity>
+    private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 ) {
     fun mainScreenIsPresent() {
         val servers = rule.activity.getString(R.string.servers)

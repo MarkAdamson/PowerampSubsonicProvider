@@ -13,11 +13,6 @@
         android:theme="@style/Theme.PowerampSubsonicProvider"
         tools:targetApi="31">
         <activity
-            android:name=".AddServerActivity"
-            android:exported="false"
-            android:label="@string/title_activity_add_server"
-            android:theme="@style/Theme.PowerampSubsonicProvider" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

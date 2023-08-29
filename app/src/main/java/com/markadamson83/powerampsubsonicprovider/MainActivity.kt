@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.markadamson83.powerampsubsonicprovider.addserver.AddServer
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
 import com.markadamson83.powerampsubsonicprovider.ui.theme.PowerampSubsonicProviderTheme
@@ -30,19 +31,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PingServer()
+                    AddServer()
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 @Composable
@@ -67,12 +60,4 @@ fun PingServer() {
     Text(
         text = "Server response: ${response?.status} ${response?.version}"
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PowerampSubsonicProviderTheme {
-        Greeting("Android")
-    }
 }
