@@ -13,7 +13,17 @@ class AddServerTest {
 
     @Test
     fun serverAdded() {
-        val demoServer = Server("Demo Server", "http://demo.subsonic.org", "guest1", "guest")
+        val demoServer = Server("DemoServerId", "Demo Server", "http://demo.subsonic.org", "guest1", "guest")
+        val viewModel = AddServerViewModel(ServerValidator())
+
+        viewModel.addServer(demoServer.serverName, demoServer.baseURL, demoServer.username, demoServer.password)
+
+        Assertions.assertEquals(AddServerState.ServerExists(demoServer), viewModel.addServerState.value)
+    }
+
+    @Test
+    fun anotherServerAdded() {
+        val demoServer = Server("DemoServer2Id", "Demo Server 2", "http://demo.subsonic.org", "guest2", "guest")
         val viewModel = AddServerViewModel(ServerValidator())
 
         viewModel.addServer(demoServer.serverName, demoServer.baseURL, demoServer.username, demoServer.password)

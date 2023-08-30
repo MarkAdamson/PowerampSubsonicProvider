@@ -23,6 +23,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
                 AddServerState.BadPassword
             is ServerValidationResult.Valid -> {
                 val server = Server(
+                    serverName.filterNot { it.isWhitespace() } + "Id",
                     serverName,
                     baseURL,
                     username,
