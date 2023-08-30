@@ -22,7 +22,7 @@ class ServerValidationTest {
     fun invalidURL(url: String) {
         val viewModel = AddServerViewModel(ServerValidator())
 
-        viewModel.addServer(url, ":username:", ":password:")
+        viewModel.addServer(":serverName:", url, ":username:", ":password:")
 
         assertEquals(AddServerState.BadURL, viewModel.addServerState.value)
     }
@@ -31,7 +31,7 @@ class ServerValidationTest {
     fun invalidUsername() {
         val viewModel = AddServerViewModel(ServerValidator())
 
-        viewModel.addServer("http://demo.subsonic.org", "", ":password:")
+        viewModel.addServer(":serverName:", "http://demo.subsonic.org", "", ":password:")
 
         assertEquals(AddServerState.BadUsername, viewModel.addServerState.value)
     }
@@ -40,14 +40,14 @@ class ServerValidationTest {
     fun invalidPassword() {
         val viewModel = AddServerViewModel(ServerValidator())
 
-        viewModel.addServer("http://demo.subsonic.org", ":username:", "")
+        viewModel.addServer(":serverName:", "http://demo.subsonic.org", ":username:", "")
 
         assertEquals(AddServerState.BadPassword, viewModel.addServerState.value)
     }
 
     @Test
     fun validServer() {
-        val result = ServerValidator().validate("http://demo.subsonic.org", "guest1", "guest")
+        val result = ServerValidator().validate("Demo Server", "http://demo.subsonic.org", "guest1", "guest")
         assertEquals(ServerValidationResult.Valid, result)
     }
 }

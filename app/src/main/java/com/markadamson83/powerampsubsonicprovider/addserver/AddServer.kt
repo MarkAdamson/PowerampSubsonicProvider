@@ -34,6 +34,7 @@ import com.markadamson83.powerampsubsonicprovider.R
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
 fun AddServer() {
+    var serverName by remember { mutableStateOf("") }
     var baseURL by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("")}
     var password by remember { mutableStateOf("") }
@@ -44,6 +45,10 @@ fun AddServer() {
     ) {
         ScreenTitle(R.string.add_a_server)
         Spacer(modifier = Modifier.height(16.dp))
+        ServerNameField(
+            value = serverName,
+            onValueChange = { serverName = it }
+        )
         BaseURLField(
             value = baseURL,
             onValueChange = { baseURL = it }
@@ -77,6 +82,22 @@ private fun ScreenTitle(@StringRes resource: Int) {
             style = typography.titleLarge
         )
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ServerNameField(
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        label = {
+            Text(text = stringResource(R.string.server_name_hint))
+        },
+        onValueChange = onValueChange
+    )
 }
 
 @Composable

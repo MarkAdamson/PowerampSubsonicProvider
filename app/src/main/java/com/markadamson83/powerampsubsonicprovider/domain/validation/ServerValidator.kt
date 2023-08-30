@@ -4,11 +4,14 @@ import androidx.core.util.PatternsCompat
 
 class ServerValidator {
     fun validate(
+        serverName: String,
         baseURL: String,
         username: String,
         password: String
     ): ServerValidationResult {
-        return if (!PatternsCompat.WEB_URL.matcher(baseURL).matches()) {
+        return if (serverName.isEmpty()) {
+            ServerValidationResult.InvalidServerName
+        } else if (!PatternsCompat.WEB_URL.matcher(baseURL).matches()) {
             ServerValidationResult.InvalidURL
         } else if (username.isEmpty()) {
             ServerValidationResult.InvalidUsername
