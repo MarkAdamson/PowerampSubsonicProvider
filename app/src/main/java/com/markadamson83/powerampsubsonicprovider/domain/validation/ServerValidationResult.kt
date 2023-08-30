@@ -4,4 +4,5 @@ sealed class ServerValidationResult {
     object InvalidURL : ServerValidationResult()
     object InvalidUsername : ServerValidationResult()
     object InvalidPassword : ServerValidationResult()
+    object Valid : ServerValidationResult()
 }

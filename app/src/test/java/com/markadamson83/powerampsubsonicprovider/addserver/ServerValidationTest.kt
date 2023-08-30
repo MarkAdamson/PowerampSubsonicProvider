@@ -2,6 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -42,5 +43,11 @@ class ServerValidationTest {
         viewModel.addServer("http://demo.subsonic.org", ":username:", "")
 
         assertEquals(AddServerState.BadPassword, viewModel.addServerState.value)
+    }
+
+    @Test
+    fun validServer() {
+        val result = ServerValidator().validate("http://demo.subsonic.org", "guest1", "guest")
+        assertEquals(ServerValidationResult.Valid, result)
     }
 }

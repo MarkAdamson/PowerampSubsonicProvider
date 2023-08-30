@@ -18,6 +18,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
                 AddServerState.BadUsername
             is ServerValidationResult.InvalidPassword ->
                 AddServerState.BadPassword
+            else -> TODO()
         }
     }
 

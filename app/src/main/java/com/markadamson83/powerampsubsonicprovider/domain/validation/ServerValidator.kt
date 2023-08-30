@@ -8,13 +8,14 @@ class ServerValidator {
         username: String,
         password: String
     ): ServerValidationResult {
-        val result = if (!PatternsCompat.WEB_URL.matcher(baseURL).matches()) {
+        return if (!PatternsCompat.WEB_URL.matcher(baseURL).matches()) {
             ServerValidationResult.InvalidURL
         } else if (username.isEmpty()) {
             ServerValidationResult.InvalidUsername
         } else if (password.isEmpty()) {
             ServerValidationResult.InvalidPassword
-        } else TODO()
-        return result
+        } else {
+            ServerValidationResult.Valid
+        }
     }
 }
