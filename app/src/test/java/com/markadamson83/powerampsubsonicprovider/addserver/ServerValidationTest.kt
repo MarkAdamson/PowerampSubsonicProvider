@@ -22,7 +22,7 @@ class ServerValidationTest {
 
         viewModel.addServer(url, ":username:", ":password:")
 
-        assertEquals(AddServerState.InvalidURL, viewModel.addServerState.value)
+        assertEquals(AddServerState.BadURL, viewModel.addServerState.value)
     }
 
     @Test
@@ -31,7 +31,7 @@ class ServerValidationTest {
 
         viewModel.addServer("http://demo.subsonic.org", "", ":password:")
 
-        assertEquals(AddServerState.InvalidUsername, viewModel.addServerState.value)
+        assertEquals(AddServerState.BadUsername, viewModel.addServerState.value)
     }
 
     @Test
@@ -40,6 +40,6 @@ class ServerValidationTest {
 
         viewModel.addServer("http://demo.subsonic.org", ":username:", "")
 
-        assertEquals(AddServerState.InvalidPassword, viewModel.addServerState.value)
+        assertEquals(AddServerState.BadPassword, viewModel.addServerState.value)
     }
 }
