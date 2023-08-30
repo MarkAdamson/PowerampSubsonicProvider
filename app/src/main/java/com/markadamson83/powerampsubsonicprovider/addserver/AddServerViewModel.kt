@@ -3,6 +3,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
@@ -20,7 +21,15 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
                 AddServerState.BadUsername
             is ServerValidationResult.InvalidPassword ->
                 AddServerState.BadPassword
-            else -> TODO()
+            is ServerValidationResult.Valid -> {
+                val server = Server(
+                    serverName,
+                    baseURL,
+                    username,
+                    password
+                )
+                AddServerState.ServerExists(server)
+            }
         }
     }
 
