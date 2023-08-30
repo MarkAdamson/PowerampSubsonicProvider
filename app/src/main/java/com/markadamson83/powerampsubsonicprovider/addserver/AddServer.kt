@@ -34,6 +34,9 @@ import com.markadamson83.powerampsubsonicprovider.R
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
 fun AddServer() {
+    var baseURL by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("")}
+    var password by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,9 +44,6 @@ fun AddServer() {
     ) {
         ScreenTitle(R.string.add_a_server)
         Spacer(modifier = Modifier.height(16.dp))
-        var baseURL by remember { mutableStateOf("") }
-        var username by remember { mutableStateOf("")}
-        var password by remember { mutableStateOf("") }
         BaseURLField(
             value = baseURL,
             onValueChange = { baseURL = it }
@@ -122,11 +122,8 @@ private fun PasswordField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
         trailingIcon = {
-            IconButton(onClick = { isVisible = !isVisible }) {
-                Icon(
-                    painter = painterResource(id = if(isVisible) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility),
-                    contentDescription = stringResource(R.string.toggle_password_visibility)
-                )
+            VisibilityToggle(isVisible) {
+                isVisible = !isVisible
             }
         },
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -135,4 +132,18 @@ private fun PasswordField(
         },
         onValueChange = onValueChange
     )
+}
+
+@Composable
+private fun VisibilityToggle(
+    isVisible: Boolean,
+    onToggle: () -> Unit = {}
+) {
+    var isVisible1 = isVisible
+    IconButton(onClick = onToggle) {
+        Icon(
+            painter = painterResource(id = if (isVisible1) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility),
+            contentDescription = stringResource(R.string.toggle_password_visibility)
+        )
+    }
 }
