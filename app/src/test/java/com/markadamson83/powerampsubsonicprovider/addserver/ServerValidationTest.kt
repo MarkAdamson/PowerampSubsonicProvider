@@ -13,6 +13,15 @@ import org.junit.jupiter.params.provider.CsvSource
 @ExtendWith(InstantTaskExecutorExtension::class)
 class ServerValidationTest {
 
+    @Test
+    fun invalidServerName() {
+        val viewModel = AddServerViewModel(ServerValidator())
+
+        viewModel.addServer("", "http://demo.subsonic.org", ":username:", ":password:")
+
+        assertEquals(AddServerState.BadServerName, viewModel.addServerState.value)
+    }
+
     @ParameterizedTest
     @CsvSource(
         "''",
