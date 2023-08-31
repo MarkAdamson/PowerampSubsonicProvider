@@ -14,18 +14,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.markadamson83.powerampsubsonicprovider.addserver.AddServer
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
+import com.markadamson83.powerampsubsonicprovider.servers.Servers
 import com.markadamson83.powerampsubsonicprovider.ui.theme.PowerampSubsonicProviderTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        private const val ADD_SERVER = "addServer"
+        private const val SERVERS = "servers"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,14 +40,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavHost(navController = navController, startDestination = "addServer") {
-                        composable("addServer") {
+                    NavHost(navController = navController, startDestination = ADD_SERVER) {
+                        composable(ADD_SERVER) {
                             AddServer(onServerAdded = {
-                                navController.navigate("servers")
+                                navController.navigate(SERVERS)
                             })
                         }
-                        composable("servers") {
-                            Text(text = stringResource(id = R.string.servers))
+                        composable(SERVERS) {
+                            Servers()
                         }
                     }
                 }
