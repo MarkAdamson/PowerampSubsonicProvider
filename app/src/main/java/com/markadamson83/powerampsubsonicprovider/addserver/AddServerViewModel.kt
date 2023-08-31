@@ -3,16 +3,15 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
-import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
-import com.markadamson83.powerampsubsonicprovider.domain.server.UserRepository
+import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
-class AddServerViewModel(private val serverValidator: ServerValidator) {
+class AddServerViewModel(private val serverValidator: ServerValidator,
+                         private val userRepository: ServerRepository
+) {
     private val _mutableAddServerState = MutableLiveData<AddServerState>()
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
-
-    private val userRepository = UserRepository(InMemoryServerStore())
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
         _mutableAddServerState.value = when (serverValidator.validate(serverName, baseURL, username, password)) {

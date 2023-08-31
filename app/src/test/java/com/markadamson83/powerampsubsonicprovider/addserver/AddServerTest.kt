@@ -2,7 +2,9 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
+import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -14,7 +16,7 @@ class AddServerTest {
     @Test
     fun serverAdded() {
         val demoServer = Server("DemoServerId", "Demo Server", "http://demo.subsonic.org", "guest1", "guest")
-        val viewModel = AddServerViewModel(ServerValidator())
+        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(demoServer.serverName, demoServer.baseURL, demoServer.username, demoServer.password)
 
@@ -24,7 +26,7 @@ class AddServerTest {
     @Test
     fun anotherServerAdded() {
         val demoServer = Server("DemoServer2Id", "Demo Server 2", "http://demo.subsonic.org", "guest2", "guest")
-        val viewModel = AddServerViewModel(ServerValidator())
+        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(demoServer.serverName, demoServer.baseURL, demoServer.username, demoServer.password)
 

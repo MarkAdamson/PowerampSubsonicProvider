@@ -2,6 +2,8 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
+import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 import org.junit.jupiter.api.Assertions.*
@@ -15,7 +17,7 @@ class ServerValidationTest {
 
     @Test
     fun invalidServerName() {
-        val viewModel = AddServerViewModel(ServerValidator())
+        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer("", "http://demo.subsonic.org", ":username:", ":password:")
 
@@ -29,7 +31,7 @@ class ServerValidationTest {
         "'http://'"
     )
     fun invalidURL(url: String) {
-        val viewModel = AddServerViewModel(ServerValidator())
+        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(":serverName:", url, ":username:", ":password:")
 
@@ -38,7 +40,7 @@ class ServerValidationTest {
 
     @Test
     fun invalidUsername() {
-        val viewModel = AddServerViewModel(ServerValidator())
+        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(":serverName:", "http://demo.subsonic.org", "", ":password:")
 
@@ -47,7 +49,7 @@ class ServerValidationTest {
 
     @Test
     fun invalidPassword() {
-        val viewModel = AddServerViewModel(ServerValidator())
+        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(":serverName:", "http://demo.subsonic.org", ":username:", "")
 
