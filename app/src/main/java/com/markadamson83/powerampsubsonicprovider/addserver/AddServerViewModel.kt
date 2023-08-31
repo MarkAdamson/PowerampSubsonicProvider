@@ -11,7 +11,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
     private val _mutableAddServerState = MutableLiveData<AddServerState>()
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
 
-    private val servers = mutableListOf<Server>()
+    val serverStore = InMemoryServerStore()
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
         _mutableAddServerState.value = when (serverValidator.validate(serverName, baseURL, username, password)) {
@@ -29,30 +29,40 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
         }
     }
 
+    class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) {
+        fun createServer(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): Server {
+            val serverId = createServerIdFor(serverName)
+            val server = Server(
+                serverId,
+                serverName,
+                baseURL,
+                username,
+                password
+            )
+            saveServer(server)
+            return server
+        }
+
+        private fun saveServer(server: Server) {
+            servers.add(server)
+        }
+
+        private fun createServerIdFor(serverName: String): String {
+            return serverName.filterNot { it.isWhitespace() } + "Id"
+        }
+    }
+
     private fun createAndAddServer(
         serverName: String,
         baseURL: String,
         username: String,
         password: String
     ): AddServerState.ServerExists {
-        return AddServerState.ServerExists(createServer(serverName, baseURL, username, password))
+        return AddServerState.ServerExists(serverStore.createServer(serverName, baseURL, username, password))
     }
-
-    private fun createServer(
-        serverName: String,
-        baseURL: String,
-        username: String,
-        password: String
-    ): Server {
-        val server = Server(
-            serverName.filterNot { it.isWhitespace() } + "Id",
-            serverName,
-            baseURL,
-            username,
-            password
-        )
-        servers.add(server)
-        return server
-    }
-
 }
