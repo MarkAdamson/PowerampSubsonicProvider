@@ -1,5 +1,7 @@
 package com.markadamson83.powerampsubsonicprovider.domain.server
 
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
+
 class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) {
     @Throws(UnresponsiveServerException::class)
     fun createServer(
@@ -8,9 +10,7 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         username: String,
         password: String
     ): Server {
-        if (baseURL == "http://bad.demo.subsonic.org") {
-            throw UnresponsiveServerException()
-        }
+        checkServerIsResponsive(baseURL)
         val serverId = createServerIdFor(serverName)
         val server = Server(
             serverId,
@@ -23,6 +23,12 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         return server
     }
 
+    private fun checkServerIsResponsive(baseURL: String) {
+        if (baseURL == "http://bad.demo.subsonic.org") {
+            throw UnresponsiveServerException()
+        }
+    }
+
     private fun createServerIdFor(serverName: String): String {
         return serverName.filterNot { it.isWhitespace() } + "Id"
     }
@@ -31,5 +37,4 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         servers.add(server)
     }
 
-    class UnresponsiveServerException : Exception()
 }

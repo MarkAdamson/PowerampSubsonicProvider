@@ -1,6 +1,7 @@
 package com.markadamson83.powerampsubsonicprovider.domain.server
 
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 
 class ServerRepository(private val serverStore: InMemoryServerStore) {
     fun createAndAddServer(
@@ -17,7 +18,7 @@ class ServerRepository(private val serverStore: InMemoryServerStore) {
                 password
             )
             AddServerState.ServerExists(server)
-        } catch (e: InMemoryServerStore.UnresponsiveServerException) {
+        } catch (e: UnresponsiveServerException) {
             AddServerState.UnresponsiveServer
         }
     }

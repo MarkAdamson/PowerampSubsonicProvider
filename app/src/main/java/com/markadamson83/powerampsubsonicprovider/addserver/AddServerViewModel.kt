@@ -24,9 +24,8 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
                 AddServerState.BadUsername
             is ServerValidationResult.InvalidPassword ->
                 AddServerState.BadPassword
-            is ServerValidationResult.Valid -> {
+            is ServerValidationResult.Valid ->
                 serverRepository.createAndAddServer(serverName, baseURL, username, password)
-            }
         }
     }
 
