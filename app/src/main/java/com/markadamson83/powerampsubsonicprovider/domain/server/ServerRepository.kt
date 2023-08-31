@@ -9,12 +9,16 @@ class ServerRepository(private val serverStore: InMemoryServerStore) {
         username: String,
         password: String
     ): AddServerState {
-        val server = serverStore.createServer(
-            serverName,
-            baseURL,
-            username,
-            password
-        )
-        return AddServerState.ServerExists(server)
+        return try {
+            val server = serverStore.createServer(
+                serverName,
+                baseURL,
+                username,
+                password
+            )
+            AddServerState.ServerExists(server)
+        } catch (e: InMemoryServerStore.UnresponsiveServerException) {
+            AddServerState.UnresponsiveServer
+        }
     }
 }
