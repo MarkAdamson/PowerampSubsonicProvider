@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,14 +31,23 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.markadamson83.powerampsubsonicprovider.R
+import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
+import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
+import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
 fun AddServer() {
+    val serverValidator = ServerValidator()
+    val serverRepository = ServerRepository(InMemoryServerStore())
+    val addServerViewModel = AddServerViewModel(serverValidator,serverRepository)
+
     var serverName by remember { mutableStateOf("") }
     var baseURL by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("")}
     var password by remember { mutableStateOf("") }
+    val addServerState by addServerViewModel.addServerState.observeAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
