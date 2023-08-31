@@ -31,13 +31,16 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.markadamson83.powerampsubsonicprovider.R
+import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
-fun AddServer() {
+fun AddServer(
+    onServerAdded: () -> Unit
+) {
     val serverValidator = ServerValidator()
     val serverRepository = ServerRepository(InMemoryServerStore())
     val addServerViewModel = AddServerViewModel(serverValidator,serverRepository)
@@ -47,6 +50,10 @@ fun AddServer() {
     var username by remember { mutableStateOf("")}
     var password by remember { mutableStateOf("") }
     val addServerState by addServerViewModel.addServerState.observeAsState()
+
+    if(addServerState is AddServerState.ServerExists) {
+        onServerAdded()
+    }
 
     Column(
         modifier = Modifier
@@ -74,7 +81,9 @@ fun AddServer() {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { }
+            onClick = {
+                addServerViewModel.addServer(serverName, baseURL, username, password)
+            }
         ) {
             Text(text = stringResource(R.string.add_server))
         }

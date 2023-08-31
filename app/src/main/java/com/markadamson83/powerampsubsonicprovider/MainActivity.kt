@@ -14,7 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.markadamson83.powerampsubsonicprovider.addserver.AddServer
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
@@ -25,13 +29,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             PowerampSubsonicProviderTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AddServer()
+                    NavHost(navController = navController, startDestination = "addServer") {
+                        composable("addServer") {
+                            AddServer(onServerAdded = {
+                                navController.navigate("servers")
+                            })
+                        }
+                        composable("servers") {
+                            Text(text = stringResource(id = R.string.servers))
+                        }
+                    }
                 }
             }
         }
