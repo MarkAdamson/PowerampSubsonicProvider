@@ -59,4 +59,10 @@ class AddServerVerification(
         rule.onNodeWithText(servers)
             .assertIsDisplayed()
     }
+
+    fun unresponsiveServerErrorIsDisplayed() {
+        val unresponsiveServerError = rule.activity.getString(R.string.unresponsive_server_error)
+        rule.onNodeWithText(unresponsiveServerError)
+            .assertIsDisplayed()
+    }
 }

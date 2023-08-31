@@ -22,4 +22,17 @@ class AddServerTest {
             mainScreenIsPresent()
         }
     }
+
+    @Test
+    fun displayServerUnresponsiveError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Bad Server")
+            typeBaseURL("http://bad.demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+        } verify {
+            unresponsiveServerErrorIsDisplayed()
+        }
+    }
 }

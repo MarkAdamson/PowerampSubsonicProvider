@@ -9,4 +9,5 @@
     <string name="add_a_server">Add a Server</string>
     <string name="toggle_password_visibility">Toggle Visibility</string>
     <string name="server_name_hint">Server Name</string>
+    <string name="unresponsive_server_error">Server Unresponsive</string>
 </resources>
