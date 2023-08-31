@@ -32,19 +32,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.markadamson83.powerampsubsonicprovider.R
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
-import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
-import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
-import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
 fun AddServerScreen(
+    addServerViewModel: AddServerViewModel,
     onServerAdded: () -> Unit
 ) {
-    val serverValidator = ServerValidator()
-    val serverRepository = ServerRepository(InMemoryServerStore())
-    val addServerViewModel = AddServerViewModel(serverValidator,serverRepository)
-
     var serverName by remember { mutableStateOf("") }
     var baseURL by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("")}

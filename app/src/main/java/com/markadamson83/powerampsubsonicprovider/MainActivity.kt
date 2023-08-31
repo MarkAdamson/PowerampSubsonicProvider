@@ -18,13 +18,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.markadamson83.powerampsubsonicprovider.addserver.AddServerScreen
+import com.markadamson83.powerampsubsonicprovider.addserver.AddServerViewModel
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
 import com.markadamson83.powerampsubsonicprovider.servers.Servers
 import com.markadamson83.powerampsubsonicprovider.ui.theme.PowerampSubsonicProviderTheme
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val addServerViewModel by viewModel<AddServerViewModel>()
 
     companion object {
         private const val ADD_SERVER = "addServer"
@@ -42,9 +46,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(navController = navController, startDestination = ADD_SERVER) {
                         composable(ADD_SERVER) {
-                            AddServerScreen(onServerAdded = {
+                            AddServerScreen(addServerViewModel) {
                                 navController.navigate(SERVERS)
-                            })
+                            }
                         }
                         composable(SERVERS) {
                             Servers()
