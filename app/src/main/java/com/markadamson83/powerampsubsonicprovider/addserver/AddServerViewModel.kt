@@ -11,6 +11,19 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
     private val _mutableAddServerState = MutableLiveData<AddServerState>()
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
 
+    class UserRepository {
+        val serverStore = InMemoryServerStore()
+
+        fun createAndAddServer(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): AddServerState {
+            return AddServerState.ServerExists(serverStore.createServer(serverName, baseURL, username, password))
+        }
+    }
+
     val serverStore = InMemoryServerStore()
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
@@ -62,7 +75,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
         baseURL: String,
         username: String,
         password: String
-    ): AddServerState.ServerExists {
+    ): AddServerState {
         return AddServerState.ServerExists(serverStore.createServer(serverName, baseURL, username, password))
     }
 }
