@@ -1,7 +1,9 @@
 package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,8 +15,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,38 +53,58 @@ fun AddServerScreen(
         onServerAdded()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        ScreenTitle(R.string.add_a_server)
-        Spacer(modifier = Modifier.height(16.dp))
-        ServerNameField(
-            value = serverName,
-            onValueChange = { serverName = it }
-        )
-        BaseURLField(
-            value = baseURL,
-            onValueChange = { baseURL = it }
-        )
-        UsernameField(
-            value = username,
-            onValueChange = { username = it }
-        )
-        PasswordField(
-            value = password,
-            onValueChange = { password = it }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                addServerViewModel.addServer(serverName, baseURL, username, password)
-            }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            Text(text = stringResource(R.string.add_server))
+            ScreenTitle(R.string.add_a_server)
+            Spacer(modifier = Modifier.height(16.dp))
+            ServerNameField(
+                value = serverName,
+                onValueChange = { serverName = it }
+            )
+            BaseURLField(
+                value = baseURL,
+                onValueChange = { baseURL = it }
+            )
+            UsernameField(
+                value = username,
+                onValueChange = { username = it }
+            )
+            PasswordField(
+                value = password,
+                onValueChange = { password = it }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    addServerViewModel.addServer(serverName, baseURL, username, password)
+                }
+            ) {
+                Text(text = stringResource(R.string.add_server))
+            }
         }
+        if(addServerState is AddServerState.UnresponsiveServer) {
+            InfoMessage(R.string.unresponsive_server_error)
+        }
+    }
+}
+
+@Composable
+fun InfoMessage(@StringRes resourceId: Int) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondary)
+    ) {
+        Text(
+            text = stringResource(resourceId)
+        )
     }
 }
 
