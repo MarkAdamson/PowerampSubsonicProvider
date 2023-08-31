@@ -8,4 +8,5 @@ sealed class AddServerState {
     object BadURL : AddServerState()
     object BadUsername : AddServerState()
     object BadPassword : AddServerState()
+    object UnresponsiveServer : AddServerState()
 }
