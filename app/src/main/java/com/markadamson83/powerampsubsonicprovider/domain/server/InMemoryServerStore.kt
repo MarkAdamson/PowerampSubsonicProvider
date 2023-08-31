@@ -19,11 +19,11 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         return server
     }
 
-    private fun saveServer(server: Server) {
-        servers.add(server)
-    }
-
     private fun createServerIdFor(serverName: String): String {
         return serverName.filterNot { it.isWhitespace() } + "Id"
+    }
+
+    private fun saveServer(server: Server) {
+        servers.add(server)
     }
 }
