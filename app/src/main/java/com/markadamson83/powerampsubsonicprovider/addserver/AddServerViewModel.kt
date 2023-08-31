@@ -24,9 +24,18 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
             is ServerValidationResult.InvalidPassword ->
                 AddServerState.BadPassword
             is ServerValidationResult.Valid -> {
-                AddServerState.ServerExists(createServer(serverName, baseURL, username, password))
+                createAndAddServer(serverName, baseURL, username, password)
             }
         }
+    }
+
+    private fun createAndAddServer(
+        serverName: String,
+        baseURL: String,
+        username: String,
+        password: String
+    ): AddServerState.ServerExists {
+        return AddServerState.ServerExists(createServer(serverName, baseURL, username, password))
     }
 
     private fun createServer(
