@@ -8,7 +8,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValida
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
 class AddServerViewModel(private val serverValidator: ServerValidator,
-                         private val userRepository: ServerRepository
+                         private val serverRepository: ServerRepository
 ) {
     private val _mutableAddServerState = MutableLiveData<AddServerState>()
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
@@ -24,7 +24,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
             is ServerValidationResult.InvalidPassword ->
                 AddServerState.BadPassword
             is ServerValidationResult.Valid -> {
-                userRepository.createAndAddServer(serverName, baseURL, username, password)
+                serverRepository.createAndAddServer(serverName, baseURL, username, password)
             }
         }
     }
