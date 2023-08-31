@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.markadamson83.powerampsubsonicprovider.addserver.AddServer
+import com.markadamson83.powerampsubsonicprovider.addserver.AddServerScreen
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
 import com.markadamson83.powerampsubsonicprovider.servers.Servers
@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(navController = navController, startDestination = ADD_SERVER) {
                         composable(ADD_SERVER) {
-                            AddServer(onServerAdded = {
+                            AddServerScreen(onServerAdded = {
                                 navController.navigate(SERVERS)
                             })
                         }

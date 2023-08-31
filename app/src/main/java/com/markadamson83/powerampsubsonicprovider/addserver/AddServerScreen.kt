@@ -38,7 +38,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValida
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
-fun AddServer(
+fun AddServerScreen(
     onServerAdded: () -> Unit
 ) {
     val serverValidator = ServerValidator()
