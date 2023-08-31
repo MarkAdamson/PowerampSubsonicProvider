@@ -15,10 +15,10 @@ import org.junit.jupiter.params.provider.CsvSource
 @ExtendWith(InstantTaskExecutorExtension::class)
 class ServerValidationTest {
 
+    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
+
     @Test
     fun invalidServerName() {
-        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
-
         viewModel.addServer("", "http://demo.subsonic.org", ":username:", ":password:")
 
         assertEquals(AddServerState.BadServerName, viewModel.addServerState.value)
@@ -31,8 +31,6 @@ class ServerValidationTest {
         "'http://'"
     )
     fun invalidURL(url: String) {
-        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
-
         viewModel.addServer(":serverName:", url, ":username:", ":password:")
 
         assertEquals(AddServerState.BadURL, viewModel.addServerState.value)
@@ -40,8 +38,6 @@ class ServerValidationTest {
 
     @Test
     fun invalidUsername() {
-        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
-
         viewModel.addServer(":serverName:", "http://demo.subsonic.org", "", ":password:")
 
         assertEquals(AddServerState.BadUsername, viewModel.addServerState.value)
@@ -49,8 +45,6 @@ class ServerValidationTest {
 
     @Test
     fun invalidPassword() {
-        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
-
         viewModel.addServer(":serverName:", "http://demo.subsonic.org", ":username:", "")
 
         assertEquals(AddServerState.BadPassword, viewModel.addServerState.value)

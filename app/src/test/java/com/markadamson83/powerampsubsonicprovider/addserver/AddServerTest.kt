@@ -13,10 +13,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class AddServerTest {
 
+    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
+
     @Test
     fun serverAdded() {
         val demoServer = Server("DemoServerId", "Demo Server", "http://demo.subsonic.org", "guest1", "guest")
-        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(demoServer.serverName, demoServer.baseURL, demoServer.username, demoServer.password)
 
@@ -26,7 +27,6 @@ class AddServerTest {
     @Test
     fun anotherServerAdded() {
         val demoServer = Server("DemoServer2Id", "Demo Server 2", "http://demo.subsonic.org", "guest2", "guest")
-        val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
 
         viewModel.addServer(demoServer.serverName, demoServer.baseURL, demoServer.username, demoServer.password)
 
