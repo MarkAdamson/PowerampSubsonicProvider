@@ -3,7 +3,8 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
-import com.markadamson83.powerampsubsonicprovider.domain.server.Server
+import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
+import com.markadamson83.powerampsubsonicprovider.domain.server.UserRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 
@@ -12,18 +13,6 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
 
     private val userRepository = UserRepository(InMemoryServerStore())
-
-    class UserRepository(private val serverStore: InMemoryServerStore) {
-
-        fun createAndAddServer(
-            serverName: String,
-            baseURL: String,
-            username: String,
-            password: String
-        ): AddServerState {
-            return AddServerState.ServerExists(serverStore.createServer(serverName, baseURL, username, password))
-        }
-    }
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
         _mutableAddServerState.value = when (serverValidator.validate(serverName, baseURL, username, password)) {
@@ -41,31 +30,4 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
         }
     }
 
-    class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) {
-        fun createServer(
-            serverName: String,
-            baseURL: String,
-            username: String,
-            password: String
-        ): Server {
-            val serverId = createServerIdFor(serverName)
-            val server = Server(
-                serverId,
-                serverName,
-                baseURL,
-                username,
-                password
-            )
-            saveServer(server)
-            return server
-        }
-
-        private fun saveServer(server: Server) {
-            servers.add(server)
-        }
-
-        private fun createServerIdFor(serverName: String): String {
-            return serverName.filterNot { it.isWhitespace() } + "Id"
-        }
-    }
 }
