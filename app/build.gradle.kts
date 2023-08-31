@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.markadamson83.powerampsubsonicprovider"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.markadamson83.powerampsubsonicprovider"
