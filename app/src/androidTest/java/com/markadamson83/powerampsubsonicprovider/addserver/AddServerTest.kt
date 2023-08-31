@@ -13,6 +13,7 @@ class AddServerTest {
     @Test
     fun testAddServer() {
         launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
             typeBaseURL("http://demo.subsonic.org")
             typeUsername("guest1")
             typePassword("guest")

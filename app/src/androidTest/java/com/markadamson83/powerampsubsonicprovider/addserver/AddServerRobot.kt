@@ -19,6 +19,11 @@ fun launchAddServerScreen(
 class AddServerRobot(
     private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 ) {
+    fun typeServerName(serverName: String) {
+        val serverNameHint = rule.activity.getString(R.string.server_name_hint)
+        rule.onNodeWithText(serverNameHint).performTextInput(serverName)
+    }
+
     fun typeBaseURL(baseURL: String) {
         val baseURLHint = rule.activity.getString(R.string.base_url_hint)
         rule.onNodeWithText(baseURLHint).performTextInput(baseURL)
