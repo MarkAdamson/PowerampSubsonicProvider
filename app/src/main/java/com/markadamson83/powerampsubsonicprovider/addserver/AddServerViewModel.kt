@@ -2,6 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
@@ -9,7 +10,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValida
 
 class AddServerViewModel(private val serverValidator: ServerValidator,
                          private val serverRepository: ServerRepository
-) {
+) : ViewModel() {
     private val _mutableAddServerState = MutableLiveData<AddServerState>()
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
 
