@@ -11,6 +11,8 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
     private val _mutableAddServerState = MutableLiveData<AddServerState>()
     val addServerState: LiveData<AddServerState> = _mutableAddServerState
 
+    private val servers = mutableListOf<Server>()
+
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
         _mutableAddServerState.value = when (serverValidator.validate(serverName, baseURL, username, password)) {
             is ServerValidationResult.InvalidServerName ->
@@ -29,6 +31,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator) {
                     username,
                     password
                 )
+                servers.add(server)
                 AddServerState.ServerExists(server)
             }
         }
