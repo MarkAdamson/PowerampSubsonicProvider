@@ -15,4 +15,5 @@
     <string name="bad_url_error">Not a valid URL</string>
     <string name="bad_server_name_error">Please enter a Server Name</string>
     <string name="bad_username_error">Please enter a username</string>
+    <string name="bad_password_error">Please enter a password</string>
 </resources>

@@ -50,6 +50,7 @@ fun AddServerScreen(
     var username by remember { mutableStateOf("")}
     var isBadUsername by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf("") }
+    var isBadPassword by remember { mutableStateOf(false) }
     val addServerState by addServerViewModel.addServerState.observeAsState()
 
     when (addServerState) {
@@ -61,6 +62,8 @@ fun AddServerScreen(
             isBadURL = true
         is AddServerState.BadUsername ->
             isBadUsername = true
+        is AddServerState.BadPassword ->
+            isBadPassword = true
         is AddServerState.BackendError ->
             InfoMessage(R.string.backend_error)
         is AddServerState.UnresponsiveServer ->
@@ -97,6 +100,7 @@ fun AddServerScreen(
             )
             PasswordField(
                 value = password,
+                isError = isBadPassword,
                 onValueChange = { password = it }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -199,12 +203,14 @@ private fun UsernameField(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun PasswordField(
     value: String,
+    isError: Boolean,
     onValueChange: (String) -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        isError = isError,
         trailingIcon = {
             VisibilityToggle(isVisible) {
                 isVisible = !isVisible
@@ -212,7 +218,8 @@ private fun PasswordField(
         },
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
         label = {
-            Text(text = stringResource(R.string.password_hint))
+            val resource = if(isError) R.string.bad_password_error else R.string.password_hint
+            Text(text = stringResource(resource))
         },
         onValueChange = onValueChange
     )
