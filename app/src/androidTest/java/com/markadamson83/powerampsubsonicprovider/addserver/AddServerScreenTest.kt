@@ -17,16 +17,8 @@ import org.koin.dsl.module
 
 class AddServerScreenTest {
 
-    private val serverStore = InMemoryServerStore()
     private val addServerModule = module {
-        factory<ServerStore> { serverStore }
-    }
-
-    private fun replaceServerStoreWith(serverStore: ServerStore) {
-        val replaceModule = module {
-            factory { serverStore }
-        }
-        loadKoinModules(replaceModule)
+        factory<ServerStore> { InMemoryServerStore() }
     }
 
     @get:Rule
@@ -110,10 +102,14 @@ class AddServerScreenTest {
 
     @After
     fun tearDown() {
-        val resetModule = module {
-            single { InMemoryServerStore() }
+        replaceServerStoreWith(InMemoryServerStore())
+    }
+
+    private fun replaceServerStoreWith(serverStore: ServerStore) {
+        val replaceModule = module {
+            factory { serverStore }
         }
-        loadKoinModules(resetModule)
+        loadKoinModules(replaceModule)
     }
 
     class UnresponsiveServerStore : ServerStore {
