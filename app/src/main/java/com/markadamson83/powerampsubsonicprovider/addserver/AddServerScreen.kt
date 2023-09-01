@@ -7,7 +7,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,9 +41,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.markadamson83.powerampsubsonicprovider.R
+import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerScreenState
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
@@ -52,7 +50,7 @@ fun AddServerScreen(
     addServerViewModel: AddServerViewModel,
     onServerAdded: () -> Unit
 ) {
-    var serverName by remember { mutableStateOf("") }
+    /*var serverName by remember { mutableStateOf("") }
     var isBadServerName by remember { mutableStateOf(false) }
     var baseURL by remember { mutableStateOf("") }
     var isBadURL by remember { mutableStateOf(false) }
@@ -61,39 +59,45 @@ fun AddServerScreen(
     var password by remember { mutableStateOf("") }
     var isBadPassword by remember { mutableStateOf(false) }
     var currentInfoMessage by remember { mutableStateOf(0) }
-    var isInfoMessageVisible by remember { mutableStateOf(false) }
+    var isInfoMessageVisible by remember { mutableStateOf(false) }*/
 
     val coroutineScope = rememberCoroutineScope()
+    val screenState by remember { mutableStateOf(AddServerScreenState(coroutineScope)) }
     val addServerState by addServerViewModel.addServerState.observeAsState()
 
-    fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
+    /*fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
         if(currentInfoMessage != message) {
             currentInfoMessage = message
             if (!isInfoMessageVisible) {
                 isInfoMessageVisible = true
-                delay(1500)
+                delay(2000)
                 isInfoMessageVisible = false
             }
         }
     }
 
+    fun resetUIState() {
+        currentInfoMessage = 0
+        isInfoMessageVisible = false
+    }*/
+
     when (addServerState) {
         is AddServerState.ServerExists ->
             onServerAdded()
         is AddServerState.BadServerName ->
-            isBadServerName = true
+            screenState.isBadServerName = true
         is AddServerState.BadURL ->
-            isBadURL = true
+            screenState.isBadURL = true
         is AddServerState.BadUsername ->
-            isBadUsername = true
+            screenState.isBadUsername = true
         is AddServerState.BadPassword ->
-            isBadPassword = true
+            screenState.isBadPassword = true
         is AddServerState.BackendError ->
-            toggleInfoMessage(R.string.backend_error)
+            screenState.toggleInfoMessage(R.string.backend_error)
         is AddServerState.UnresponsiveServer ->
-            toggleInfoMessage(R.string.unresponsive_server_error)
+            screenState.toggleInfoMessage(R.string.unresponsive_server_error)
         is AddServerState.Offline ->
-            toggleInfoMessage(R.string.offline_error)
+            screenState.toggleInfoMessage(R.string.offline_error)
         else -> {}
     }
 
@@ -108,37 +112,43 @@ fun AddServerScreen(
             ScreenTitle(R.string.add_a_server)
             Spacer(modifier = Modifier.height(16.dp))
             ServerNameField(
-                value = serverName,
-                isError = isBadServerName,
-                onValueChange = { serverName = it }
+                value = screenState.serverName,
+                isError = screenState.isBadServerName,
+                onValueChange = { screenState.serverName = it }
             )
             BaseURLField(
-                value = baseURL,
-                isError = isBadURL,
-                onValueChange = { baseURL = it }
+                value = screenState.baseURL,
+                isError = screenState.isBadURL,
+                onValueChange = {
+                    screenState.isBadURL = false
+                    screenState.baseURL = it
+                }
             )
             UsernameField(
-                value = username,
-                isError = isBadUsername,
-                onValueChange = { username = it }
+                value = screenState.username,
+                isError = screenState.isBadUsername,
+                onValueChange = { screenState.username = it }
             )
             PasswordField(
-                value = password,
-                isError = isBadPassword,
-                onValueChange = { password = it }
+                value = screenState.password,
+                isError = screenState.isBadPassword,
+                onValueChange = { screenState.password = it }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    addServerViewModel.addServer(serverName, baseURL, username, password)
+                    screenState.resetUIState()
+                    with(screenState) {
+                        addServerViewModel.addServer(serverName, baseURL, username, password)
+                    }
                 }
             ) {
                 Text(text = stringResource(R.string.add_server))
             }
         }
 
-        InfoMessage(isInfoMessageVisible, currentInfoMessage)
+        InfoMessage(screenState.isInfoMessageVisible, screenState.currentInfoMessage)
     }
 }
 
