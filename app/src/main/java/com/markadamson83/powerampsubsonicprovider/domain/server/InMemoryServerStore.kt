@@ -2,9 +2,10 @@ package com.markadamson83.powerampsubsonicprovider.domain.server
 
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 
-class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) {
+class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) :
+    ServerStore {
     @Throws(UnresponsiveServerException::class)
-    fun createServer(
+    override fun createServer(
         serverName: String,
         baseURL: String,
         username: String,

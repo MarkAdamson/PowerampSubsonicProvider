@@ -1,9 +1,11 @@
 package com.markadamson83.powerampsubsonicprovider.domain.server
 
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.BackendException
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.ConnectionUnavailableException
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 
-class ServerRepository(private val serverStore: InMemoryServerStore) {
+class ServerRepository(private val serverStore: ServerStore) {
     fun createAndAddServer(
         serverName: String,
         baseURL: String,
@@ -20,6 +22,10 @@ class ServerRepository(private val serverStore: InMemoryServerStore) {
             AddServerState.ServerExists(server)
         } catch (e: UnresponsiveServerException) {
             AddServerState.UnresponsiveServer
+        } catch (e: BackendException) {
+            AddServerState.BackendError
+        } catch (e: ConnectionUnavailableException) {
+            AddServerState.Offline
         }
     }
 }
