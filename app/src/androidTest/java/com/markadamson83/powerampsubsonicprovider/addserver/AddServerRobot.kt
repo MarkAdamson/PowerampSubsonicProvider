@@ -60,6 +60,12 @@ class AddServerVerification(
             .assertIsDisplayed()
     }
 
+    fun badURLErrorIsDisplayed() {
+        val badURLError = rule.activity.getString(R.string.bad_url_error)
+        rule.onNodeWithText(badURLError)
+            .assertIsDisplayed()
+    }
+
     fun unresponsiveServerErrorIsDisplayed() {
         val unresponsiveServerError = rule.activity.getString(R.string.unresponsive_server_error)
         rule.onNodeWithText(unresponsiveServerError)

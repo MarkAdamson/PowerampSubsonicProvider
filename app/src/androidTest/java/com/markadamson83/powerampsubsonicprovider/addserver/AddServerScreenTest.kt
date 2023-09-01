@@ -51,6 +51,19 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun displayBadURLError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Bad Server")
+            typeBaseURL("!badURL!")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+        } verify {
+            badURLErrorIsDisplayed()
+        }
+    }
+
+    @Test
     fun displayServerUnresponsiveError() {
         replaceServerStoreWith(UnresponsiveServerStore())
 

@@ -12,4 +12,5 @@
     <string name="unresponsive_server_error">Server Unresponsive</string>
     <string name="backend_error">An error occurred in the server</string>
     <string name="offline_error">You appear to be offline</string>
+    <string name="bad_url_error">Not a valid URL</string>
 </resources>
