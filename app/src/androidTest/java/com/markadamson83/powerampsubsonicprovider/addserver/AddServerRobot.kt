@@ -60,6 +60,12 @@ class AddServerVerification(
             .assertIsDisplayed()
     }
 
+    fun badServerNameErrorIsDisplayed() {
+        val badServerNameError = rule.activity.getString(R.string.bad_server_name_error)
+        rule.onNodeWithText(badServerNameError)
+            .assertIsDisplayed()
+    }
+
     fun badURLErrorIsDisplayed() {
         val badURLError = rule.activity.getString(R.string.bad_url_error)
         rule.onNodeWithText(badURLError)

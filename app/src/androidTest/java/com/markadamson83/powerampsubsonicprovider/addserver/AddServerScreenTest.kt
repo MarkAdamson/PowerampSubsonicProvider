@@ -43,6 +43,19 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun displayBadServerNameError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+        } verify {
+            badServerNameErrorIsDisplayed()
+        }
+    }
+
+    @Test
     fun displayBadURLError() {
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Bad Server")

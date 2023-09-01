@@ -44,14 +44,27 @@ fun AddServerScreen(
     onServerAdded: () -> Unit
 ) {
     var serverName by remember { mutableStateOf("") }
+    var isBadServerName by remember { mutableStateOf(false) }
     var baseURL by remember { mutableStateOf("") }
     var isBadURL by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("")}
     var password by remember { mutableStateOf("") }
     val addServerState by addServerViewModel.addServerState.observeAsState()
 
-    if(addServerState is AddServerState.ServerExists) {
-        onServerAdded()
+    when (addServerState) {
+        is AddServerState.ServerExists ->
+            onServerAdded()
+        is AddServerState.BadServerName ->
+            isBadServerName = true
+        is AddServerState.BadURL ->
+            isBadURL = true
+        is AddServerState.BackendError ->
+            InfoMessage(R.string.backend_error)
+        is AddServerState.UnresponsiveServer ->
+            InfoMessage(R.string.unresponsive_server_error)
+        is AddServerState.Offline ->
+            InfoMessage(R.string.offline_error)
+        else -> {}
     }
 
     Box(
@@ -66,6 +79,7 @@ fun AddServerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             ServerNameField(
                 value = serverName,
+                isError = isBadServerName,
                 onValueChange = { serverName = it }
             )
             BaseURLField(
@@ -91,17 +105,6 @@ fun AddServerScreen(
                 Text(text = stringResource(R.string.add_server))
             }
         }
-        when (addServerState) {
-            is AddServerState.BadURL ->
-                isBadURL = true
-            is AddServerState.BackendError ->
-                InfoMessage(R.string.backend_error)
-            is AddServerState.UnresponsiveServer ->
-                InfoMessage(R.string.unresponsive_server_error)
-            is AddServerState.Offline ->
-                InfoMessage(R.string.offline_error)
-            else -> {}
-        }
     }
 }
 
@@ -109,8 +112,8 @@ fun AddServerScreen(
 fun InfoMessage(@StringRes resourceId: Int) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary)
+            .fillMaxWidth(),
+        color = MaterialTheme.colorScheme.error,
     ) {
         Text(
             text = stringResource(resourceId)
@@ -135,13 +138,16 @@ private fun ScreenTitle(@StringRes resource: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 private fun ServerNameField(
     value: String,
+    isError: Boolean,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        isError = isError,
         label = {
-            Text(text = stringResource(R.string.server_name_hint))
+            val resource = if(isError) R.string.bad_server_name_error else R.string.server_name_hint
+            Text(text = stringResource(resource))
         },
         onValueChange = onValueChange
     )
