@@ -22,6 +22,13 @@ class AddServerScreenTest {
         factory<ServerStore> { serverStore }
     }
 
+    private fun replaceServerStoreWith(serverStore: ServerStore) {
+        val replaceModule = module {
+            factory { serverStore }
+        }
+        loadKoinModules(replaceModule)
+    }
+
     @get:Rule
     val addServerTestRule = createAndroidComposeRule<MainActivity>()
 
@@ -45,10 +52,7 @@ class AddServerScreenTest {
 
     @Test
     fun displayServerUnresponsiveError() {
-        val replaceModule = module {
-            factory<ServerStore> { UnresponsiveServerStore() }
-        }
-        loadKoinModules(replaceModule)
+        replaceServerStoreWith(UnresponsiveServerStore())
 
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Bad Server")
@@ -63,10 +67,7 @@ class AddServerScreenTest {
 
     @Test
     fun displayBackendError() {
-        val replaceModule = module {
-            factory<ServerStore> { IncorrectUserOrPasswordServerStore() }
-        }
-        loadKoinModules(replaceModule)
+        replaceServerStoreWith(IncorrectUserOrPasswordServerStore())
 
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Demo Server")
@@ -81,10 +82,7 @@ class AddServerScreenTest {
 
     @Test
     fun displayOffLineError() {
-        val replaceModule = module {
-            factory<ServerStore> { OfflineServerStore() }
-        }
-        loadKoinModules(replaceModule)
+        replaceServerStoreWith(OfflineServerStore())
 
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Demo Server")
