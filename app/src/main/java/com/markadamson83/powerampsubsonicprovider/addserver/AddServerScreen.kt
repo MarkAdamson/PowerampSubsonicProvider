@@ -96,6 +96,9 @@ fun AddServerScreen(
             is AddServerState.UnresponsiveServer -> {
                 InfoMessage(R.string.unresponsive_server_error)
             }
+            is AddServerState.Offline -> {
+                InfoMessage(R.string.offline_error)
+            }
             else -> {}
         }
     }
