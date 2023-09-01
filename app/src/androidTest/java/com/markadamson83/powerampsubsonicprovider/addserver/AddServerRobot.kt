@@ -2,9 +2,11 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.markadamson83.powerampsubsonicprovider.MainActivity
 import com.markadamson83.powerampsubsonicprovider.R
@@ -21,22 +23,42 @@ class AddServerRobot(
 ) {
     fun typeServerName(serverName: String) {
         val serverNameHint = rule.activity.getString(R.string.server_name_hint)
-        rule.onNodeWithText(serverNameHint).performTextInput(serverName)
+        rule.onNodeWithTag(serverNameHint).performTextInput(serverName)
+    }
+
+    fun clearServerName() {
+        val serverNameHint = rule.activity.getString(R.string.server_name_hint)
+        rule.onNodeWithTag(serverNameHint).performTextClearance()
     }
 
     fun typeBaseURL(baseURL: String) {
         val baseURLHint = rule.activity.getString(R.string.base_url_hint)
-        rule.onNodeWithText(baseURLHint).performTextInput(baseURL)
+        rule.onNodeWithTag(baseURLHint).performTextInput(baseURL)
+    }
+
+    fun clearBaseURL() {
+        val baseURLHint = rule.activity.getString(R.string.base_url_hint)
+        rule.onNodeWithTag(baseURLHint).performTextClearance()
     }
 
     fun typeUsername(username: String) {
         val usernameHint = rule.activity.getString(R.string.username_hint)
-        rule.onNodeWithText(usernameHint).performTextInput(username)
+        rule.onNodeWithTag(usernameHint).performTextInput(username)
+    }
+
+    fun clearUsername() {
+        val usernameHint = rule.activity.getString(R.string.username_hint)
+        rule.onNodeWithTag(usernameHint).performTextClearance()
     }
 
     fun typePassword(password: String) {
         val passwordHint = rule.activity.getString(R.string.password_hint)
-        rule.onNodeWithText(passwordHint).performTextInput(password)
+        rule.onNodeWithTag(passwordHint).performTextInput(password)
+    }
+
+    fun clearPassword() {
+        val passwordHint = rule.activity.getString(R.string.password_hint)
+        rule.onNodeWithTag(passwordHint).performTextClearance()
     }
 
     fun submit() {
@@ -66,10 +88,22 @@ class AddServerVerification(
             .assertIsDisplayed()
     }
 
+    fun badServerNameErrorIsNotDisplayed() {
+        val badServerNameError = rule.activity.getString(R.string.bad_server_name_error)
+        rule.onNodeWithText(badServerNameError)
+            .assertDoesNotExist()
+    }
+
     fun badURLErrorIsDisplayed() {
         val badURLError = rule.activity.getString(R.string.bad_url_error)
         rule.onNodeWithText(badURLError)
             .assertIsDisplayed()
+    }
+
+    fun badURLErrorIsNotDisplayed() {
+        val badURLError = rule.activity.getString(R.string.bad_url_error)
+        rule.onNodeWithText(badURLError)
+            .assertDoesNotExist()
     }
 
     fun badUsernameErrorIsDisplayed() {
@@ -78,10 +112,22 @@ class AddServerVerification(
             .assertIsDisplayed()
     }
 
+    fun badUsernameErrorIsNotDisplayed() {
+        val badUsernameError = rule.activity.getString(R.string.bad_username_error)
+        rule.onNodeWithText(badUsernameError)
+            .assertDoesNotExist()
+    }
+
     fun badPasswordErrorIsDisplayed() {
         val badPasswordError = rule.activity.getString(R.string.bad_password_error)
         rule.onNodeWithText(badPasswordError)
             .assertIsDisplayed()
+    }
+
+    fun badPasswordErrorIsNotDisplayed() {
+        val badPasswordError = rule.activity.getString(R.string.bad_password_error)
+        rule.onNodeWithText(badPasswordError)
+            .assertDoesNotExist()
     }
 
     fun unresponsiveServerErrorIsDisplayed() {

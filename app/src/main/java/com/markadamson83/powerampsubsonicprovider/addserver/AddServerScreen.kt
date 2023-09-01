@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -113,26 +114,35 @@ fun AddServerScreen(
             Spacer(modifier = Modifier.height(16.dp))
             ServerNameField(
                 value = screenState.serverName,
-                isError = screenState.isBadServerName,
-                onValueChange = { screenState.serverName = it }
+                isError = screenState.showBadServerName,
+                onValueChange = {
+                    screenState.serverName = it
+                    screenState.resetLastSubmittedServerName()
+                }
             )
             BaseURLField(
                 value = screenState.baseURL,
-                isError = screenState.isBadURL,
+                isError = screenState.showBadURL,
                 onValueChange = {
-                    screenState.isBadURL = false
                     screenState.baseURL = it
+                    screenState.resetLastSubmittedBaseURL()
                 }
             )
             UsernameField(
                 value = screenState.username,
-                isError = screenState.isBadUsername,
-                onValueChange = { screenState.username = it }
+                isError = screenState.showBadUsername,
+                onValueChange = {
+                    screenState.username = it
+                    screenState.resetLastSubmittedUsername()
+                }
             )
             PasswordField(
                 value = screenState.password,
-                isError = screenState.isBadPassword,
-                onValueChange = { screenState.password = it }
+                isError = screenState.showBadPassword,
+                onValueChange = {
+                    screenState.password = it
+                    screenState.resetLastSubmittedPassword()
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
@@ -207,7 +217,9 @@ private fun ServerNameField(
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(stringResource(id = R.string.server_name_hint)),
         value = value,
         isError = isError,
         label = {
@@ -226,7 +238,10 @@ private fun BaseURLField(
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .testTag(stringResource(id = R.string.base_url_hint)),
         value = value,
         isError = isError,
         label = {
@@ -245,7 +260,10 @@ private fun UsernameField(
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .testTag(stringResource(id = R.string.username_hint)),
         value = value,
         isError = isError,
         label = {
@@ -265,7 +283,10 @@ private fun PasswordField(
 ) {
     var isVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .testTag(stringResource(id = R.string.password_hint)),
         value = value,
         isError = isError,
         trailingIcon = {

@@ -56,6 +56,35 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun resetBadServerNameError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+            typeServerName("Demo Server")
+        } verify {
+            badServerNameErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun reenterBadServerName() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+            typeServerName("Demo Server")
+            clearServerName()
+        } verify {
+            badServerNameErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
     fun displayBadURLError() {
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Bad Server")
@@ -65,6 +94,35 @@ class AddServerScreenTest {
             submit()
         } verify {
             badURLErrorIsDisplayed()
+        }
+    }
+
+    @Test
+    fun resetBadURLError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Bad Server")
+            typeBaseURL("!badURL!")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+            clearBaseURL()
+        } verify {
+            badURLErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun reenterBadURL() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Bad Server")
+            typeBaseURL("!badURL!")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+            clearBaseURL()
+            typeBaseURL("!badURL!")
+        } verify {
+            badURLErrorIsNotDisplayed()
         }
     }
 
@@ -82,6 +140,35 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun resetBadUsernameError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("")
+            typePassword("guest")
+            submit()
+            typeUsername("guest1")
+        } verify {
+            badUsernameErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun reenterBadUsername() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("")
+            typePassword("guest")
+            submit()
+            typeUsername("guest1")
+            clearUsername()
+        } verify {
+            badUsernameErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
     fun displayBadPasswordError() {
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Demo Server")
@@ -91,6 +178,35 @@ class AddServerScreenTest {
             submit()
         } verify {
             badPasswordErrorIsDisplayed()
+        }
+    }
+
+    @Test
+    fun resetBadPasswordError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("")
+            submit()
+            typePassword("guest")
+        } verify {
+            badPasswordErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun reenterBadPassword() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("")
+            submit()
+            typePassword("guest")
+            clearPassword()
+        } verify {
+            badPasswordErrorIsNotDisplayed()
         }
     }
 

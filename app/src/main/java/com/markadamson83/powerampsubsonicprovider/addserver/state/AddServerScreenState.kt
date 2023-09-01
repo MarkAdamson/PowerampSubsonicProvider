@@ -22,6 +22,20 @@ class AddServerScreenState(
     var currentInfoMessage by mutableStateOf(0)
     var isInfoMessageVisible by mutableStateOf(false)
 
+    private var lastSubmittedServerName by mutableStateOf<String?>(null)
+    private var lastSubmittedBaseURL by mutableStateOf<String?>(null)
+    private var lastSubmittedUsername by mutableStateOf<String?>(null)
+    private var lastSubmittedPassword by mutableStateOf<String?>(null)
+
+    val showBadServerName : Boolean
+        get() = isBadServerName && lastSubmittedServerName == serverName
+    val showBadURL : Boolean
+        get() = isBadURL && lastSubmittedBaseURL == baseURL
+    val showBadUsername : Boolean
+        get() = isBadUsername && lastSubmittedUsername == username
+    val showBadPassword : Boolean
+        get() = isBadPassword && lastSubmittedPassword == password
+
     fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
         if(currentInfoMessage != message) {
             currentInfoMessage = message
@@ -36,5 +50,25 @@ class AddServerScreenState(
     fun resetUIState() {
         currentInfoMessage = 0
         isInfoMessageVisible = false
+        lastSubmittedServerName = serverName
+        lastSubmittedBaseURL = baseURL
+        lastSubmittedUsername = username
+        lastSubmittedPassword = password
+    }
+
+    fun resetLastSubmittedServerName() {
+        lastSubmittedServerName = null
+    }
+
+    fun resetLastSubmittedBaseURL() {
+        lastSubmittedBaseURL = null
+    }
+
+    fun resetLastSubmittedUsername() {
+        lastSubmittedUsername = null
+    }
+
+    fun resetLastSubmittedPassword() {
+        lastSubmittedPassword = null
     }
 }
