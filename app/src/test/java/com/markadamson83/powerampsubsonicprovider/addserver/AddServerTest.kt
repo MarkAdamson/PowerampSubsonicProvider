@@ -32,13 +32,4 @@ class AddServerTest {
 
         Assertions.assertEquals(AddServerState.ServerExists(demoServer), viewModel.addServerState.value)
     }
-
-    @Test
-    fun unresponsiveServerAdded() {
-        val server = Server("BadServerId", "Bad Server", "http://bad.demo.subsonic.org", "guest1", "guest")
-
-        viewModel.addServer(server.serverName, server.baseURL, server.username, server.password)
-
-        Assertions.assertEquals(AddServerState.UnresponsiveServer, viewModel.addServerState.value)
-    }
 }

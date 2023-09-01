@@ -11,7 +11,6 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         username: String,
         password: String
     ): Server {
-        checkServerIsResponsive(baseURL)
         val serverId = createServerIdFor(serverName)
         val server = Server(
             serverId,
@@ -22,12 +21,6 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         )
         saveServer(server)
         return server
-    }
-
-    private fun checkServerIsResponsive(baseURL: String) {
-        if (baseURL == "http://bad.demo.subsonic.org") {
-            throw UnresponsiveServerException()
-        }
     }
 
     private fun createServerIdFor(serverName: String): String {
