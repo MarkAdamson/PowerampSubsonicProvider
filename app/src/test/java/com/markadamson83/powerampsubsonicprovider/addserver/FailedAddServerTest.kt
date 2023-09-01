@@ -3,6 +3,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.BackendException
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.ConnectionUnavailableException
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
@@ -28,6 +29,15 @@ class FailedAddServerTest {
         assertEquals(AddServerState.Offline, result)
     }
 
+    @Test
+    fun serverUnresponsiveError() {
+        val serverRepository = ServerRepository(UnresponsiveServerStore())
+
+        val result = serverRepository.createAndAddServer(":serverName:", ":baseURL:", ":username:", ":password:")
+
+        assertEquals(AddServerState.UnresponsiveServer, result)
+    }
+
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
         override fun createServer(
@@ -49,6 +59,18 @@ class FailedAddServerTest {
             password: String
         ): Server {
             throw ConnectionUnavailableException()
+        }
+    }
+
+    class UnresponsiveServerStore :
+        ServerStore {
+        override fun createServer(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): Server {
+            throw UnresponsiveServerException()
         }
     }
 }
