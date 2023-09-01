@@ -1,7 +1,13 @@
 package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,6 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.markadamson83.powerampsubsonicprovider.R
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
@@ -51,7 +60,22 @@ fun AddServerScreen(
     var isBadUsername by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf("") }
     var isBadPassword by remember { mutableStateOf(false) }
+    var currentInfoMessage by remember { mutableStateOf(0) }
+    var isInfoMessageVisible by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
     val addServerState by addServerViewModel.addServerState.observeAsState()
+
+    fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
+        if(currentInfoMessage != message) {
+            currentInfoMessage = message
+            if (!isInfoMessageVisible) {
+                isInfoMessageVisible = true
+                delay(1500)
+                isInfoMessageVisible = false
+            }
+        }
+    }
 
     when (addServerState) {
         is AddServerState.ServerExists ->
@@ -65,11 +89,11 @@ fun AddServerScreen(
         is AddServerState.BadPassword ->
             isBadPassword = true
         is AddServerState.BackendError ->
-            InfoMessage(R.string.backend_error)
+            toggleInfoMessage(R.string.backend_error)
         is AddServerState.UnresponsiveServer ->
-            InfoMessage(R.string.unresponsive_server_error)
+            toggleInfoMessage(R.string.unresponsive_server_error)
         is AddServerState.Offline ->
-            InfoMessage(R.string.offline_error)
+            toggleInfoMessage(R.string.offline_error)
         else -> {}
     }
 
@@ -113,19 +137,42 @@ fun AddServerScreen(
                 Text(text = stringResource(R.string.add_server))
             }
         }
+
+        InfoMessage(isInfoMessageVisible, currentInfoMessage)
     }
 }
 
 @Composable
-fun InfoMessage(@StringRes resourceId: Int) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth(),
-        color = MaterialTheme.colorScheme.error,
-    ) {
-        Text(
-            text = stringResource(resourceId)
+fun InfoMessage(
+    isVisible: Boolean,
+    @StringRes resourceId: Int
+) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            initialOffsetY = { -it },
+            animationSpec = tween(durationMillis = 200, easing = FastOutLinearInEasing)
+        ),
+        exit = fadeOut(
+            targetAlpha = 0f,
+            animationSpec = tween(durationMillis = 300, easing = LinearEasing)
         )
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.error,
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = stringResource(resourceId),
+                    color = MaterialTheme.colorScheme.onError,
+                )
+            }
+        }
     }
 }
 
