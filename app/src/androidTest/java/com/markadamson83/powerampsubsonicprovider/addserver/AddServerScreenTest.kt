@@ -69,6 +69,19 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun displayBadUsernameError() {
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("")
+            typePassword("guest")
+            submit()
+        } verify {
+            badUsernameErrorIsDisplayed()
+        }
+    }
+
+    @Test
     fun displayServerUnresponsiveError() {
         replaceServerStoreWith(UnresponsiveServerStore())
 

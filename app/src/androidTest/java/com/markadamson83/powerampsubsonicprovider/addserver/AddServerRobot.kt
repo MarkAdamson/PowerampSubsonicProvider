@@ -72,6 +72,12 @@ class AddServerVerification(
             .assertIsDisplayed()
     }
 
+    fun badUsernameErrorIsDisplayed() {
+        val badUsernameError = rule.activity.getString(R.string.bad_username_error)
+        rule.onNodeWithText(badUsernameError)
+            .assertIsDisplayed()
+    }
+
     fun unresponsiveServerErrorIsDisplayed() {
         val unresponsiveServerError = rule.activity.getString(R.string.unresponsive_server_error)
         rule.onNodeWithText(unresponsiveServerError)

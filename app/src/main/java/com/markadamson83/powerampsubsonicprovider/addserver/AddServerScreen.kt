@@ -48,6 +48,7 @@ fun AddServerScreen(
     var baseURL by remember { mutableStateOf("") }
     var isBadURL by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("")}
+    var isBadUsername by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf("") }
     val addServerState by addServerViewModel.addServerState.observeAsState()
 
@@ -58,6 +59,8 @@ fun AddServerScreen(
             isBadServerName = true
         is AddServerState.BadURL ->
             isBadURL = true
+        is AddServerState.BadUsername ->
+            isBadUsername = true
         is AddServerState.BackendError ->
             InfoMessage(R.string.backend_error)
         is AddServerState.UnresponsiveServer ->
@@ -89,6 +92,7 @@ fun AddServerScreen(
             )
             UsernameField(
                 value = username,
+                isError = isBadUsername,
                 onValueChange = { username = it }
             )
             PasswordField(
@@ -176,13 +180,16 @@ private fun BaseURLField(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun UsernameField(
     value: String,
+    isError: Boolean,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        isError = isError,
         label = {
-            Text(text = stringResource(R.string.username_hint))
+            val resource = if(isError) R.string.bad_username_error else R.string.username_hint
+            Text(text = stringResource(resource))
         },
         onValueChange = onValueChange
     )
