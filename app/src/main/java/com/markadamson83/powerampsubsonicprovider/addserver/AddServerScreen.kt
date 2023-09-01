@@ -45,6 +45,7 @@ fun AddServerScreen(
 ) {
     var serverName by remember { mutableStateOf("") }
     var baseURL by remember { mutableStateOf("") }
+    var isBadURL by remember { mutableStateOf(false) }
     var username by remember { mutableStateOf("")}
     var password by remember { mutableStateOf("") }
     val addServerState by addServerViewModel.addServerState.observeAsState()
@@ -69,6 +70,7 @@ fun AddServerScreen(
             )
             BaseURLField(
                 value = baseURL,
+                isError = isBadURL,
                 onValueChange = { baseURL = it }
             )
             UsernameField(
@@ -90,15 +92,14 @@ fun AddServerScreen(
             }
         }
         when (addServerState) {
-            is AddServerState.BackendError -> {
+            is AddServerState.BadURL ->
+                isBadURL = true
+            is AddServerState.BackendError ->
                 InfoMessage(R.string.backend_error)
-            }
-            is AddServerState.UnresponsiveServer -> {
+            is AddServerState.UnresponsiveServer ->
                 InfoMessage(R.string.unresponsive_server_error)
-            }
-            is AddServerState.Offline -> {
+            is AddServerState.Offline ->
                 InfoMessage(R.string.offline_error)
-            }
             else -> {}
         }
     }
@@ -150,13 +151,16 @@ private fun ServerNameField(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun BaseURLField(
     value: String,
+    isError: Boolean,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        isError = isError,
         label = {
-            Text(text = stringResource(R.string.base_url_hint))
+            val resource = if(isError) R.string.bad_url_error else R.string.base_url_hint
+            Text(text = stringResource(id = resource))
         },
         onValueChange = onValueChange
     )
