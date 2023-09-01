@@ -3,6 +3,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.markadamson83.powerampsubsonicprovider.MainActivity
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.BackendException
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.ConnectionUnavailableException
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
@@ -78,6 +79,24 @@ class AddServerScreenTest {
         }
     }
 
+    @Test
+    fun displayOffLineError() {
+        val replaceModule = module {
+            factory<ServerStore> { OfflineServerStore() }
+        }
+        loadKoinModules(replaceModule)
+
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+        } verify {
+            offlineErrorIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         val resetModule = module {
@@ -106,6 +125,17 @@ class AddServerScreenTest {
             password: String
         ): Server {
             throw BackendException()
+        }
+    }
+
+    class OfflineServerStore : ServerStore {
+        override fun createServer(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): Server {
+            throw ConnectionUnavailableException()
         }
     }
 }

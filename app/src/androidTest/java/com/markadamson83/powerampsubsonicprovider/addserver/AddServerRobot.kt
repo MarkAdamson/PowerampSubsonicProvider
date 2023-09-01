@@ -71,4 +71,10 @@ class AddServerVerification(
         rule.onNodeWithText(backendError)
             .assertIsDisplayed()
     }
+
+    fun offlineErrorIsDisplayed() {
+        val offlineError = rule.activity.getString(R.string.offline_error)
+        rule.onNodeWithText(offlineError)
+            .assertIsDisplayed()
+    }
 }

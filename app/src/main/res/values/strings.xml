@@ -11,4 +11,5 @@
     <string name="server_name_hint">Server Name</string>
     <string name="unresponsive_server_error">Server Unresponsive</string>
     <string name="backend_error">An error occurred in the server</string>
+    <string name="offline_error">You appear to be offline</string>
 </resources>
