@@ -65,4 +65,10 @@ class AddServerVerification(
         rule.onNodeWithText(unresponsiveServerError)
             .assertIsDisplayed()
     }
+
+    fun backendErrorIsDisplayed() {
+        val backendError = rule.activity.getString(R.string.backend_error)
+        rule.onNodeWithText(backendError)
+            .assertIsDisplayed()
+    }
 }

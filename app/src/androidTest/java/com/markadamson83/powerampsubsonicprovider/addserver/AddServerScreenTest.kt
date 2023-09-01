@@ -2,6 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.markadamson83.powerampsubsonicprovider.MainActivity
+import com.markadamson83.powerampsubsonicprovider.domain.exceptions.BackendException
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
@@ -59,6 +60,32 @@ class AddServerScreenTest {
         }
     }
 
+    @Test
+    fun displayBackendError() {
+        val replaceModule = module {
+            factory<ServerStore> { IncorrectUserOrPasswordServerStore() }
+        }
+        loadKoinModules(replaceModule)
+
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("abc")
+            typePassword("def")
+            submit()
+        } verify {
+            backendErrorIsDisplayed()
+        }
+    }
+
+    @After
+    fun tearDown() {
+        val resetModule = module {
+            single { InMemoryServerStore() }
+        }
+        loadKoinModules(resetModule)
+    }
+
     class UnresponsiveServerStore : ServerStore {
         override fun createServer(
             serverName: String,
@@ -70,11 +97,15 @@ class AddServerScreenTest {
         }
     }
 
-    @After
-    fun tearDown() {
-        val resetModule = module {
-            single { InMemoryServerStore() }
+    class IncorrectUserOrPasswordServerStore :
+        ServerStore {
+        override fun createServer(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): Server {
+            throw BackendException()
         }
-        loadKoinModules(resetModule)
     }
 }

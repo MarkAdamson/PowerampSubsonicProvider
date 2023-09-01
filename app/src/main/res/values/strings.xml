@@ -10,4 +10,5 @@
     <string name="toggle_password_visibility">Toggle Visibility</string>
     <string name="server_name_hint">Server Name</string>
     <string name="unresponsive_server_error">Server Unresponsive</string>
+    <string name="backend_error">An error occurred in the server</string>
 </resources>

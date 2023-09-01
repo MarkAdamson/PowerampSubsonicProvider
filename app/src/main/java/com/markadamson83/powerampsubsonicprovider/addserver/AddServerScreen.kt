@@ -89,8 +89,14 @@ fun AddServerScreen(
                 Text(text = stringResource(R.string.add_server))
             }
         }
-        if(addServerState is AddServerState.UnresponsiveServer) {
-            InfoMessage(R.string.unresponsive_server_error)
+        when (addServerState) {
+            is AddServerState.BackendError -> {
+                InfoMessage(R.string.backend_error)
+            }
+            is AddServerState.UnresponsiveServer -> {
+                InfoMessage(R.string.unresponsive_server_error)
+            }
+            else -> {}
         }
     }
 }
