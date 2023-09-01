@@ -5,7 +5,7 @@ import com.markadamson83.powerampsubsonicprovider.MainActivity
 import org.junit.Rule
 import org.junit.Test
 
-class AddServerTest {
+class AddServerScreenTest {
 
     @get:Rule
     val addServerTestRule = createAndroidComposeRule<MainActivity>()
