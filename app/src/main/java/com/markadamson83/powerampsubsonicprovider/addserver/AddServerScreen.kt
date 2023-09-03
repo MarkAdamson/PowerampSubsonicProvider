@@ -82,24 +82,21 @@ fun AddServerScreen(
         isInfoMessageVisible = false
     }*/
 
+    screenState.isBadServerName = addServerState is AddServerState.BadServerName
+    screenState.isBadURL = addServerState is AddServerState.BadURL
+    screenState.isBadUsername = addServerState is AddServerState.BadUsername
+    screenState.isBadPassword = addServerState is AddServerState.BadPassword
+
     when (addServerState) {
         is AddServerState.ServerExists ->
             onServerAdded()
-        is AddServerState.BadServerName ->
-            screenState.isBadServerName = true
-        is AddServerState.BadURL ->
-            screenState.isBadURL = true
-        is AddServerState.BadUsername ->
-            screenState.isBadUsername = true
-        is AddServerState.BadPassword ->
-            screenState.isBadPassword = true
         is AddServerState.BackendError ->
             screenState.toggleInfoMessage(R.string.backend_error)
         is AddServerState.UnresponsiveServer ->
             screenState.toggleInfoMessage(R.string.unresponsive_server_error)
         is AddServerState.Offline ->
             screenState.toggleInfoMessage(R.string.offline_error)
-        else -> {}
+        else -> { }
     }
 
     Box(
