@@ -1,12 +1,7 @@
 package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,36 +46,9 @@ fun AddServerScreen(
     addServerViewModel: AddServerViewModel,
     onServerAdded: () -> Unit
 ) {
-    /*var serverName by remember { mutableStateOf("") }
-    var isBadServerName by remember { mutableStateOf(false) }
-    var baseURL by remember { mutableStateOf("") }
-    var isBadURL by remember { mutableStateOf(false) }
-    var username by remember { mutableStateOf("")}
-    var isBadUsername by remember { mutableStateOf(false) }
-    var password by remember { mutableStateOf("") }
-    var isBadPassword by remember { mutableStateOf(false) }
-    var currentInfoMessage by remember { mutableStateOf(0) }
-    var isInfoMessageVisible by remember { mutableStateOf(false) }*/
-
     val coroutineScope = rememberCoroutineScope()
     val screenState by remember { mutableStateOf(AddServerScreenState(coroutineScope)) }
     val addServerState by addServerViewModel.addServerState.observeAsState()
-
-    /*fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
-        if(currentInfoMessage != message) {
-            currentInfoMessage = message
-            if (!isInfoMessageVisible) {
-                isInfoMessageVisible = true
-                delay(2000)
-                isInfoMessageVisible = false
-            }
-        }
-    }
-
-    fun resetUIState() {
-        currentInfoMessage = 0
-        isInfoMessageVisible = false
-    }*/
 
     screenState.isBadServerName = addServerState is AddServerState.BadServerName
     screenState.isBadURL = addServerState is AddServerState.BadURL
@@ -91,11 +59,11 @@ fun AddServerScreen(
         is AddServerState.ServerExists ->
             onServerAdded()
         is AddServerState.BackendError ->
-            screenState.toggleInfoMessage(R.string.backend_error)
+            screenState.toggleInfoMessage(stringResource(R.string.backend_error))
         is AddServerState.UnresponsiveServer ->
-            screenState.toggleInfoMessage(R.string.unresponsive_server_error)
+            screenState.toggleInfoMessage(stringResource(R.string.unresponsive_server_error))
         is AddServerState.Offline ->
-            screenState.toggleInfoMessage(R.string.offline_error)
+            screenState.toggleInfoMessage(stringResource(R.string.offline_error))
         else -> { }
     }
 
@@ -155,41 +123,31 @@ fun AddServerScreen(
             }
         }
 
-        InfoMessage(screenState.isInfoMessageVisible, screenState.currentInfoMessage)
+        SnackbarHost(
+            hostState = screenState.snackbarHostState,
+            snackbar = {
+                InfoMessage(message = it.visuals.message)
+            }
+        )
     }
 }
 
 @Composable
 fun InfoMessage(
-    isVisible: Boolean,
-    @StringRes resourceId: Int
+    message: String
 ) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInVertically(
-            initialOffsetY = { -it },
-            animationSpec = tween(durationMillis = 200, easing = FastOutLinearInEasing)
-        ),
-        exit = fadeOut(
-            targetAlpha = 0f,
-            animationSpec = tween(durationMillis = 300, easing = LinearEasing)
-        )
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.error),
+        horizontalArrangement = Arrangement.Center,
     ) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.error,
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    modifier = Modifier.padding(16.dp),
-                    text = stringResource(resourceId),
-                    color = MaterialTheme.colorScheme.onError,
-                )
-            }
-        }
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = message,
+            color = MaterialTheme.colorScheme.onError,
+        )
     }
 }
 

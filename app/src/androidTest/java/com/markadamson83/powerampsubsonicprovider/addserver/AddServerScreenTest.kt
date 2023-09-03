@@ -255,6 +255,22 @@ class AddServerScreenTest {
         }
     }
 
+    @Test
+    fun submitWhileInfoMessageDisplayed() {
+        replaceServerStoreWith(OfflineServerStore())
+
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+            submit()
+        } verify {
+            offlineErrorIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         replaceServerStoreWith(InMemoryServerStore())

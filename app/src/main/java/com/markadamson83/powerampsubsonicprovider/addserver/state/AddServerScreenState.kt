@@ -1,11 +1,10 @@
 package com.markadamson83.powerampsubsonicprovider.addserver.state
 
-import androidx.annotation.StringRes
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AddServerScreenState(
@@ -19,13 +18,14 @@ class AddServerScreenState(
     var isBadUsername by mutableStateOf(false)
     var password by mutableStateOf("")
     var isBadPassword by mutableStateOf(false)
-    var currentInfoMessage by mutableStateOf(0)
-    var isInfoMessageVisible by mutableStateOf(false)
+
+    val snackbarHostState = SnackbarHostState()
 
     private var lastSubmittedServerName by mutableStateOf<String?>(null)
     private var lastSubmittedBaseURL by mutableStateOf<String?>(null)
     private var lastSubmittedUsername by mutableStateOf<String?>(null)
     private var lastSubmittedPassword by mutableStateOf<String?>(null)
+    private var lastInfoMessage by mutableStateOf("")
 
     val showBadServerName : Boolean
         get() = isBadServerName && lastSubmittedServerName == serverName
@@ -36,24 +36,21 @@ class AddServerScreenState(
     val showBadPassword : Boolean
         get() = isBadPassword && lastSubmittedPassword == password
 
-    fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
-        if(currentInfoMessage != message) {
-            currentInfoMessage = message
-            if (!isInfoMessageVisible) {
-                isInfoMessageVisible = true
-                delay(3000)
-                isInfoMessageVisible = false
+    fun toggleInfoMessage(message: String) {
+        if (message != lastInfoMessage) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
             }
+            lastInfoMessage = message
         }
     }
 
     fun resetUIState() {
-        currentInfoMessage = 0
-        isInfoMessageVisible = false
         lastSubmittedServerName = serverName
         lastSubmittedBaseURL = baseURL
         lastSubmittedUsername = username
         lastSubmittedPassword = password
+        lastInfoMessage = ""
     }
 
     fun resetLastSubmittedServerName() {
