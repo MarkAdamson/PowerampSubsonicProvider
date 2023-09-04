@@ -6,7 +6,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.exceptions.ConnectionUn
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 
 class ServerRepository(private val serverStore: ServerStore) {
-    fun createAndAddServer(
+    suspend fun createAndAddServer(
         serverName: String,
         baseURL: String,
         username: String,

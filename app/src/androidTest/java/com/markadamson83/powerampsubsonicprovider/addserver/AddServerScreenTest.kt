@@ -340,7 +340,7 @@ class AddServerScreenTest {
     }
 
     class UnresponsiveServerStore : ServerStore {
-        override fun createServer(
+        override suspend fun createServer(
             serverName: String,
             baseURL: String,
             username: String,
@@ -352,7 +352,7 @@ class AddServerScreenTest {
 
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
-        override fun createServer(
+        override suspend fun createServer(
             serverName: String,
             baseURL: String,
             username: String,
@@ -363,7 +363,7 @@ class AddServerScreenTest {
     }
 
     class OfflineServerStore : ServerStore {
-        override fun createServer(
+        override suspend fun createServer(
             serverName: String,
             baseURL: String,
             username: String,

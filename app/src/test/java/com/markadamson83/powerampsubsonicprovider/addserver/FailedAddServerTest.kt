@@ -7,12 +7,13 @@ import com.markadamson83.powerampsubsonicprovider.domain.exceptions.Unresponsive
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class FailedAddServerTest {
     @Test
-    fun backendError() {
+    fun backendError() = runBlocking {
         val serverRepository = ServerRepository(IncorrectUserOrPasswordServerStore())
 
         val result = serverRepository.createAndAddServer(":serverName:", ":baseURL:", ":username:", ":password:")
@@ -21,7 +22,7 @@ class FailedAddServerTest {
     }
 
     @Test
-    fun offlineError() {
+    fun offlineError() = runBlocking {
         val serverRepository = ServerRepository(OfflineServerStore())
 
         val result = serverRepository.createAndAddServer(":serverName:", ":baseURL:", ":username:", ":password:")
@@ -30,7 +31,7 @@ class FailedAddServerTest {
     }
 
     @Test
-    fun serverUnresponsiveError() {
+    fun serverUnresponsiveError() = runBlocking {
         val serverRepository = ServerRepository(UnresponsiveServerStore())
 
         val result = serverRepository.createAndAddServer(":serverName:", ":baseURL:", ":username:", ":password:")
@@ -40,7 +41,7 @@ class FailedAddServerTest {
 
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
-        override fun createServer(
+        override suspend fun createServer(
             serverName: String,
             baseURL: String,
             username: String,
@@ -52,7 +53,7 @@ class FailedAddServerTest {
 
     class OfflineServerStore :
         ServerStore {
-        override fun createServer(
+        override suspend fun createServer(
             serverName: String,
             baseURL: String,
             username: String,
@@ -64,7 +65,7 @@ class FailedAddServerTest {
 
     class UnresponsiveServerStore :
         ServerStore {
-        override fun createServer(
+        override suspend fun createServer(
             serverName: String,
             baseURL: String,
             username: String,
