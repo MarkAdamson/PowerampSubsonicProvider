@@ -85,6 +85,17 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun persistServerNameOnOrientationChange() {
+        launchAddServerScreen(addServerTestRule) {
+            setPortraitOrientation()
+            typeServerName("Demo Server")
+            setLandscapeOrientation()
+        } verify {
+            serverNameIs("Demo Server")
+        }
+    }
+
+    @Test
     fun displayBadURLError() {
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Bad Server")
@@ -123,6 +134,17 @@ class AddServerScreenTest {
             typeBaseURL("!badURL!")
         } verify {
             badURLErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun persistURLOnOrientationChange() {
+        launchAddServerScreen(addServerTestRule) {
+            setPortraitOrientation()
+            typeBaseURL("http://demo.subsonic.org")
+            setLandscapeOrientation()
+        } verify {
+            urlIs("http://demo.subsonic.org")
         }
     }
 
@@ -169,6 +191,17 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun persistUsernameOnOrientationChange() {
+        launchAddServerScreen(addServerTestRule) {
+            setPortraitOrientation()
+            typeUsername("guest1")
+            setLandscapeOrientation()
+        } verify {
+            usernameIs("guest1")
+        }
+    }
+
+    @Test
     fun displayBadPasswordError() {
         launchAddServerScreen(addServerTestRule) {
             typeServerName("Demo Server")
@@ -207,6 +240,18 @@ class AddServerScreenTest {
             clearPassword()
         } verify {
             badPasswordErrorIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun persistPasswordOnOrientationChange() {
+        launchAddServerScreen(addServerTestRule) {
+            setPortraitOrientation()
+            typePassword("guest")
+            setLandscapeOrientation()
+            togglePasswordVisibility()
+        } verify {
+            passwordIs("guest")
         }
     }
 

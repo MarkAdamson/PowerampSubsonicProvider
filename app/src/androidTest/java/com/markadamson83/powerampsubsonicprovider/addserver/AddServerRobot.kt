@@ -1,6 +1,10 @@
 package com.markadamson83.powerampsubsonicprovider.addserver
 
+import android.content.pm.ActivityInfo
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -21,6 +25,14 @@ fun launchAddServerScreen(
 class AddServerRobot(
     private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 ) {
+    fun setPortraitOrientation() {
+        rule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    fun setLandscapeOrientation() {
+        rule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+    }
+
     fun typeServerName(serverName: String) {
         val serverNameHint = rule.activity.getString(R.string.server_name_hint)
         rule.onNodeWithTag(serverNameHint).performTextInput(serverName)
@@ -61,6 +73,11 @@ class AddServerRobot(
         rule.onNodeWithTag(passwordHint).performTextClearance()
     }
 
+    fun togglePasswordVisibility() {
+        val passwordVisibilityContentDescription = rule.activity.getString(R.string.toggle_password_visibility)
+        rule.onNodeWithTag(passwordVisibilityContentDescription).performClick()
+    }
+
     fun submit() {
         val addServer = rule.activity.getString(R.string.add_server)
         rule.onNodeWithText(addServer).performClick()
@@ -94,6 +111,12 @@ class AddServerVerification(
             .assertDoesNotExist()
     }
 
+    fun serverNameIs(text: String) {
+        val serverNameHint = rule.activity.getString(R.string.server_name_hint)
+        rule.onNodeWithTag(serverNameHint)
+            .assert(hasText(text))
+    }
+
     fun badURLErrorIsDisplayed() {
         val badURLError = rule.activity.getString(R.string.bad_url_error)
         rule.onNodeWithText(badURLError)
@@ -104,6 +127,12 @@ class AddServerVerification(
         val badURLError = rule.activity.getString(R.string.bad_url_error)
         rule.onNodeWithText(badURLError)
             .assertDoesNotExist()
+    }
+
+    fun urlIs(text: String) {
+        val baseURLHint = rule.activity.getString(R.string.base_url_hint)
+        rule.onNodeWithTag(baseURLHint)
+            .assert(hasText(text))
     }
 
     fun badUsernameErrorIsDisplayed() {
@@ -118,6 +147,12 @@ class AddServerVerification(
             .assertDoesNotExist()
     }
 
+    fun usernameIs(text: String) {
+        val usernameHint = rule.activity.getString(R.string.username_hint)
+        rule.onNodeWithTag(usernameHint)
+            .assert(hasText(text))
+    }
+
     fun badPasswordErrorIsDisplayed() {
         val badPasswordError = rule.activity.getString(R.string.bad_password_error)
         rule.onNodeWithText(badPasswordError)
@@ -128,6 +163,12 @@ class AddServerVerification(
         val badPasswordError = rule.activity.getString(R.string.bad_password_error)
         rule.onNodeWithText(badPasswordError)
             .assertDoesNotExist()
+    }
+
+    fun passwordIs(text: String) {
+        val passwordHint = rule.activity.getString(R.string.password_hint)
+        rule.onNodeWithTag(passwordHint)
+            .assert(hasText(text))
     }
 
     fun unresponsiveServerErrorIsDisplayed() {

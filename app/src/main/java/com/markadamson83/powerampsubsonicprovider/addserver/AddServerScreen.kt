@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.markadamson83.powerampsubsonicprovider.R
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerScreenState
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import kotlinx.coroutines.launch
 
 @Composable
 @Preview(device = Devices.PIXEL_4_XL)
@@ -47,8 +50,18 @@ fun AddServerScreen(
     onServerAdded: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val screenState by remember { mutableStateOf(AddServerScreenState(coroutineScope)) }
+    val screenState by rememberSaveable{ mutableStateOf(AddServerScreenState()) }
     val addServerState by addServerViewModel.addServerState.observeAsState()
+
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState())}
+    fun toggleInfoMessage(message: String) {
+        if (message != screenState.lastInfoMessage) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+            }
+            screenState.lastInfoMessage = message
+        }
+    }
 
     screenState.isBadServerName = addServerState is AddServerState.BadServerName
     screenState.isBadURL = addServerState is AddServerState.BadURL
@@ -59,11 +72,11 @@ fun AddServerScreen(
         is AddServerState.ServerExists ->
             onServerAdded()
         is AddServerState.BackendError ->
-            screenState.toggleInfoMessage(stringResource(R.string.backend_error))
+            toggleInfoMessage(stringResource(R.string.backend_error))
         is AddServerState.UnresponsiveServer ->
-            screenState.toggleInfoMessage(stringResource(R.string.unresponsive_server_error))
+            toggleInfoMessage(stringResource(R.string.unresponsive_server_error))
         is AddServerState.Offline ->
-            screenState.toggleInfoMessage(stringResource(R.string.offline_error))
+            toggleInfoMessage(stringResource(R.string.offline_error))
         else -> { }
     }
 
@@ -124,7 +137,7 @@ fun AddServerScreen(
         }
 
         SnackbarHost(
-            hostState = screenState.snackbarHostState,
+            hostState = snackbarHostState,
             snackbar = {
                 InfoMessage(message = it.visuals.message)
             }
@@ -138,9 +151,9 @@ fun InfoMessage(
 ) {
     Row(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.error),
+        Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.error),
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(
@@ -194,9 +207,9 @@ private fun BaseURLField(
 ) {
     OutlinedTextField(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .testTag(stringResource(id = R.string.base_url_hint)),
+        Modifier
+            .fillMaxWidth()
+            .testTag(stringResource(id = R.string.base_url_hint)),
         value = value,
         isError = isError,
         label = {
@@ -264,7 +277,10 @@ private fun VisibilityToggle(
     onToggle: () -> Unit = {}
 ) {
     var isVisible1 = isVisible
-    IconButton(onClick = onToggle) {
+    IconButton(
+        modifier = Modifier.testTag(stringResource(id = R.string.toggle_password_visibility)),
+        onClick = onToggle
+    ) {
         Icon(
             painter = painterResource(id = if (isVisible1) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility),
             contentDescription = stringResource(R.string.toggle_password_visibility)
