@@ -97,6 +97,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     testImplementation("androidx.arch.core:core-testing:2.2.0")
 }

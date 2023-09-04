@@ -3,10 +3,14 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddServerViewModel(private val serverValidator: ServerValidator,
                          private val serverRepository: ServerRepository
@@ -35,8 +39,12 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
         username: String,
         password: String
     ) {
-        _mutableAddServerState.value = AddServerState.Saving
-        _mutableAddServerState.value = serverRepository.createAndAddServer(serverName, baseURL, username, password)
+        viewModelScope.launch {
+            _mutableAddServerState.value = AddServerState.Saving
+            _mutableAddServerState.value = withContext(Dispatchers.Unconfined) {
+                serverRepository.createAndAddServer(serverName, baseURL, username, password)
+            }
+        }
     }
 
 }
