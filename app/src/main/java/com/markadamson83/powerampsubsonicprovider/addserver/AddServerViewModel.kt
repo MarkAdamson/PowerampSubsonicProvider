@@ -16,19 +16,19 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
                          private val serverRepository: ServerRepository,
                          private val dispatchers: CoroutineDispatchers
 ) : ViewModel() {
-    private val _mutableAddServerState = MutableLiveData<AddServerState>()
-    val addServerState: LiveData<AddServerState> = _mutableAddServerState
+    private val mutableAddServerState = MutableLiveData<AddServerState>()
+    val addServerState: LiveData<AddServerState> = mutableAddServerState
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
         when (serverValidator.validate(serverName, baseURL, username, password)) {
             is ServerValidationResult.InvalidServerName ->
-                _mutableAddServerState.value = AddServerState.BadServerName
+                mutableAddServerState.value = AddServerState.BadServerName
             is ServerValidationResult.InvalidURL ->
-                _mutableAddServerState.value = AddServerState.BadURL
+                mutableAddServerState.value = AddServerState.BadURL
             is ServerValidationResult.InvalidUsername ->
-                _mutableAddServerState.value = AddServerState.BadUsername
+                mutableAddServerState.value = AddServerState.BadUsername
             is ServerValidationResult.InvalidPassword ->
-                _mutableAddServerState.value = AddServerState.BadPassword
+                mutableAddServerState.value = AddServerState.BadPassword
             is ServerValidationResult.Valid ->
                 performAddServer(serverName, baseURL, username, password)
         }
@@ -41,8 +41,8 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
         password: String
     ) {
         viewModelScope.launch {
-            _mutableAddServerState.value = AddServerState.Saving
-            _mutableAddServerState.value = withContext(dispatchers.background) {
+            mutableAddServerState.value = AddServerState.Saving
+            mutableAddServerState.value = withContext(dispatchers.background) {
                 serverRepository.createAndAddServer(serverName, baseURL, username, password)
             }
         }
