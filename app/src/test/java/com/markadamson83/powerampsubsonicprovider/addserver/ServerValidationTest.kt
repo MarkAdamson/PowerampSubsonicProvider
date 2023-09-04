@@ -2,6 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.app.TestDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
@@ -15,7 +16,7 @@ import org.junit.jupiter.params.provider.CsvSource
 @ExtendWith(InstantTaskExecutorExtension::class)
 class ServerValidationTest {
 
-    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
+    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()), TestDispatchers())
 
     @Test
     fun invalidServerName() {

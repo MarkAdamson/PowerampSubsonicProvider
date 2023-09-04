@@ -9,12 +9,14 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val applicationModule = module {
+    single<CoroutineDispatchers> { DefaultDispatchers() }
     single<ServerStore> { InMemoryServerStore() }
     factory { ServerValidator() }
     factory { ServerRepository(serverStore = get())}
 
     viewModel { AddServerViewModel(
         serverValidator = get(),
-        serverRepository = get()
+        serverRepository = get(),
+        dispatchers = get()
     ) }
 }

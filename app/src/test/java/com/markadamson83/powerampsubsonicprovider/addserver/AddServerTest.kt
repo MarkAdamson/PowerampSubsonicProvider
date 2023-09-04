@@ -2,6 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
 import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
+import com.markadamson83.powerampsubsonicprovider.app.TestDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class AddServerTest {
 
-    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()))
+    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()), TestDispatchers())
 
     @Test
     fun serverAdded() {
