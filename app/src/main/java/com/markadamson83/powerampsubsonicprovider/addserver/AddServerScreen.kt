@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -117,9 +116,13 @@ fun AddServerScreen(
             PasswordField(
                 value = screenState.password,
                 isError = screenState.showBadPassword,
+                isPasswordVisible = screenState.isPasswordVisible,
                 onValueChange = {
                     screenState.password = it
                     screenState.resetLastSubmittedPassword()
+                },
+                onTogglePasswordVisibility = {
+                    screenState.isPasswordVisible = !screenState.isPasswordVisible
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -247,9 +250,10 @@ private fun UsernameField(
 private fun PasswordField(
     value: String,
     isError: Boolean,
-    onValueChange: (String) -> Unit
+    isPasswordVisible: Boolean,
+    onValueChange: (String) -> Unit,
+    onTogglePasswordVisibility: () -> Unit = {}
 ) {
-    var isVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier =
             Modifier
@@ -258,11 +262,9 @@ private fun PasswordField(
         value = value,
         isError = isError,
         trailingIcon = {
-            VisibilityToggle(isVisible) {
-                isVisible = !isVisible
-            }
+            VisibilityToggle(isPasswordVisible, onTogglePasswordVisibility)
         },
-        visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         label = {
             val resource = if(isError) R.string.bad_password_error else R.string.password_hint
             Text(text = stringResource(resource))
@@ -276,14 +278,13 @@ private fun VisibilityToggle(
     isVisible: Boolean,
     onToggle: () -> Unit = {}
 ) {
-    var isVisible1 = isVisible
     IconButton(
         modifier = Modifier.testTag(stringResource(id = R.string.toggle_password_visibility)),
         onClick = onToggle
     ) {
         Icon(
-            painter = painterResource(id = if (isVisible1) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility),
-            contentDescription = stringResource(R.string.toggle_password_visibility)
+            painter = painterResource(id = if (isVisible) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility),
+            contentDescription = stringResource(id = if (isVisible) R.string.hide_password else R.string.show_password),
         )
     }
 }

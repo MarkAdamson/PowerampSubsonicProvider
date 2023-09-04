@@ -3,7 +3,7 @@ package com.markadamson83.powerampsubsonicprovider.addserver
 import android.content.pm.ActivityInfo
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -169,6 +169,12 @@ class AddServerVerification(
         val passwordHint = rule.activity.getString(R.string.password_hint)
         rule.onNodeWithTag(passwordHint)
             .assert(hasText(text))
+    }
+
+    fun passwordIsVisible() {
+        val togglePasswordVisiblity = rule.activity.getString(R.string.toggle_password_visibility)
+        rule.onNodeWithTag(togglePasswordVisiblity)
+            .assert(hasContentDescription(rule.activity.getString(R.string.hide_password)))
     }
 
     fun unresponsiveServerErrorIsDisplayed() {

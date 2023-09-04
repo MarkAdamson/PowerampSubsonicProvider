@@ -256,6 +256,17 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun persistPasswordVisibilityOnOrientationChange() {
+        launchAddServerScreen(addServerTestRule) {
+            setPortraitOrientation()
+            togglePasswordVisibility()
+            setLandscapeOrientation()
+        } verify {
+            passwordIsVisible()
+        }
+    }
+
+    @Test
     fun displayServerUnresponsiveError() {
         replaceServerStoreWith(UnresponsiveServerStore())
 
