@@ -11,4 +11,5 @@ sealed class AddServerState {
     object UnresponsiveServer : AddServerState()
     object BackendError : AddServerState()
     object Offline : AddServerState()
+    object Saving: AddServerState()
 }
