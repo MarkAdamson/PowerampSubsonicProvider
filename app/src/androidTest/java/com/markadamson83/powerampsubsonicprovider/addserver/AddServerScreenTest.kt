@@ -356,6 +356,10 @@ class AddServerScreenTest {
     }
 
     class UnresponsiveServerStore : ServerStore {
+        override fun servers(): List<Server> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun createServer(
             serverName: String,
             baseURL: String,
@@ -368,6 +372,10 @@ class AddServerScreenTest {
 
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
+        override fun servers(): List<Server> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun createServer(
             serverName: String,
             baseURL: String,
@@ -379,6 +387,10 @@ class AddServerScreenTest {
     }
 
     class OfflineServerStore : ServerStore {
+        override fun servers(): List<Server> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun createServer(
             serverName: String,
             baseURL: String,
@@ -390,6 +402,10 @@ class AddServerScreenTest {
     }
 
     class DelayingServerStore : ServerStore {
+        override fun servers(): List<Server> {
+            TODO("Not yet implemented")
+        }
+
         override suspend fun createServer(
             serverName: String,
             baseURL: String,

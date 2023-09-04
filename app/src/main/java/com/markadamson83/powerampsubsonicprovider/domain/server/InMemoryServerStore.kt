@@ -4,6 +4,10 @@ import com.markadamson83.powerampsubsonicprovider.domain.exceptions.Unresponsive
 
 class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) :
     ServerStore {
+    override fun servers(): List<Server> {
+        return servers
+    }
+
     @Throws(UnresponsiveServerException::class)
     override suspend fun createServer(
         serverName: String,

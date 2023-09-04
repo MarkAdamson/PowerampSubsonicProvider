@@ -1,6 +1,7 @@
 package com.markadamson83.powerampsubsonicprovider.servers
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
+import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.infrastructure.builder.ServerBuilder.Companion.aServer
 import com.markadamson83.powerampsubsonicprovider.servers.state.ServersState
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -23,7 +24,14 @@ class ServersTest {
     fun serversConfigured() {
         val demoServer = aServer().build()
         val demoServer2 = aServer().withName("Demo Server 2").build()
-        val viewModel = ServersViewModel(listOf(demoServer, demoServer2))
+        val viewModel = ServersViewModel(
+            InMemoryServerStore(
+                mutableListOf(
+                    demoServer,
+                    demoServer2
+                )
+            )
+        )
 
         viewModel.getServers()
 
