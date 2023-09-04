@@ -17,6 +17,7 @@ class AddServerScreenState(): Parcelable {
     var isPasswordVisible by mutableStateOf(false)
     var isBadPassword by mutableStateOf(false)
     var lastInfoMessage by mutableStateOf("")
+    var isSaving by mutableStateOf(false)
 
     private var lastSubmittedServerName by mutableStateOf<String?>(null)
     private var lastSubmittedBaseURL by mutableStateOf<String?>(null)
@@ -43,6 +44,7 @@ class AddServerScreenState(): Parcelable {
         isPasswordVisible = parcel.readByte() != 0.toByte()
         isBadPassword = parcel.readByte() != 0.toByte()
         lastInfoMessage = parcel.readString() ?: ""
+        isSaving = parcel.readByte() != 0.toByte()
 
         lastSubmittedServerName = parcel.readString()
         lastSubmittedBaseURL = parcel.readString()
@@ -85,6 +87,7 @@ class AddServerScreenState(): Parcelable {
         parcel.writeByte(if (isPasswordVisible) 1 else 0)
         parcel.writeByte(if (isBadPassword) 1 else 0)
         parcel.writeString(lastInfoMessage)
+        parcel.writeByte(if (isSaving) 1 else 0)
 
         parcel.writeString(lastSubmittedServerName)
         parcel.writeString(lastSubmittedBaseURL)

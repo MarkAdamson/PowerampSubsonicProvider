@@ -8,9 +8,9 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.markadamson83.powerampsubsonicprovider.MainActivity
 import com.markadamson83.powerampsubsonicprovider.R
@@ -175,6 +175,12 @@ class AddServerVerification(
         val togglePasswordVisiblity = rule.activity.getString(R.string.toggle_password_visibility)
         rule.onNodeWithTag(togglePasswordVisiblity)
             .assert(hasContentDescription(rule.activity.getString(R.string.hide_password)))
+    }
+
+    fun blockingSavingIsDisplayed() {
+        val loading = rule.activity.getString(R.string.loading)
+        rule.onNodeWithTag(loading)
+            .assertIsDisplayed()
     }
 
     fun unresponsiveServerErrorIsDisplayed() {

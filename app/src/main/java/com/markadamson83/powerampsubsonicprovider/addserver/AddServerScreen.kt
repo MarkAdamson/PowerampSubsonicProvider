@@ -1,6 +1,12 @@
 package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -66,6 +74,7 @@ fun AddServerScreen(
     screenState.isBadURL = addServerState is AddServerState.BadURL
     screenState.isBadUsername = addServerState is AddServerState.BadUsername
     screenState.isBadPassword = addServerState is AddServerState.BadPassword
+    screenState.isSaving = addServerState is AddServerState.Saving
 
     when (addServerState) {
         is AddServerState.ServerExists ->
@@ -145,6 +154,8 @@ fun AddServerScreen(
                 InfoMessage(message = it.visuals.message)
             }
         )
+        
+        BlockingSaving(screenState.isSaving)
     }
 }
 
@@ -164,6 +175,31 @@ fun InfoMessage(
             text = message,
             color = MaterialTheme.colorScheme.onError,
         )
+    }
+}
+
+@Composable
+fun BlockingSaving(isVisible: Boolean) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(
+            initialAlpha = 0f,
+            animationSpec = tween(durationMillis = 150, easing = FastOutLinearInEasing)
+        ),
+        exit = fadeOut(
+            targetAlpha = 0f,
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(stringResource(R.string.loading))
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }
 
@@ -232,9 +268,9 @@ private fun UsernameField(
 ) {
     OutlinedTextField(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .testTag(stringResource(id = R.string.username_hint)),
+        Modifier
+            .fillMaxWidth()
+            .testTag(stringResource(id = R.string.username_hint)),
         value = value,
         isError = isError,
         label = {

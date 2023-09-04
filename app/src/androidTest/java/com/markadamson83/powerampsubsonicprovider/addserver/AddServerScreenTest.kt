@@ -8,6 +8,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.exceptions.Unresponsive
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
+import kotlinx.coroutines.delay
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -327,6 +328,21 @@ class AddServerScreenTest {
         }
     }
 
+    @Test
+    fun displayBlockingSaving() {
+        replaceServerStoreWith(DelayingServerStore())
+
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("guest1")
+            typePassword("guest")
+            submit()
+        } verify {
+            blockingSavingIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         replaceServerStoreWith(InMemoryServerStore())
@@ -370,6 +386,18 @@ class AddServerScreenTest {
             password: String
         ): Server {
             throw ConnectionUnavailableException()
+        }
+    }
+
+    class DelayingServerStore : ServerStore {
+        override suspend fun createServer(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): Server {
+            delay(1000)
+            return Server("someId", serverName, baseURL, username, password)
         }
     }
 }
