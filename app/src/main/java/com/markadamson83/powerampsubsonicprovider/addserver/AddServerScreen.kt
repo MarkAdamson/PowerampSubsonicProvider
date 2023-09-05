@@ -194,7 +194,7 @@ fun BlockingSaving(isVisible: Boolean) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag(stringResource(R.string.loading))
+                .testTag(stringResource(R.string.saving))
                 .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)),
             contentAlignment = Alignment.Center
         ) {

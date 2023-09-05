@@ -19,12 +19,20 @@ fun launchAddServerScreen(
     rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
     block: AddServerRobot.() -> Unit
 ): AddServerRobot {
-        return AddServerRobot(rule).apply(block)
+        return AddServerRobot(rule).apply {
+            clickNewServer()
+        }.apply(block)
 }
 
 class AddServerRobot(
     private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 ) {
+
+    fun clickNewServer() {
+        rule.onNodeWithText(rule.activity.getString(R.string.new_server))
+            .performClick()
+    }
+
     fun setPortraitOrientation() {
         rule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
@@ -178,7 +186,7 @@ class AddServerVerification(
     }
 
     fun blockingSavingIsDisplayed() {
-        val loading = rule.activity.getString(R.string.loading)
+        val loading = rule.activity.getString(R.string.saving)
         rule.onNodeWithTag(loading)
             .assertIsDisplayed()
     }
