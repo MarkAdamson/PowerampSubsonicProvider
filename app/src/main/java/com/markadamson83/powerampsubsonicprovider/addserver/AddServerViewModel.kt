@@ -48,4 +48,7 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
         }
     }
 
+    fun resetState() {
+        mutableAddServerState.value = null
+    }
 }

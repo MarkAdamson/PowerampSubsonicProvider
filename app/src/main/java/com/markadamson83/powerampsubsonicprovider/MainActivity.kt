@@ -45,14 +45,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NavHost(navController = navController, startDestination = SERVERS) {
-                        composable(ADD_SERVER) {
-                            AddServerScreen(addServerViewModel) {
-                                navController.navigate(SERVERS)
-                            }
-                        }
                         composable(SERVERS) {
                             ServersScreen() {
                                 navController.navigate(ADD_SERVER)
+                            }
+                        }
+                        composable(ADD_SERVER) {
+                            AddServerScreen(addServerViewModel.apply { resetState() }) {
+                                navController.navigateUp()
                             }
                         }
                     }
