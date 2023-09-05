@@ -22,4 +22,13 @@ class ServersScreenTest {
             addServerScreenIsDisplayed()
         }
     }
+
+    @Test
+    fun displayNoServersMessage() {
+        launchServersScreen(serversTestRule) {
+            // no operation
+        } verify {
+            noServersMessageIsDisplayed()
+        }
+    }
 }

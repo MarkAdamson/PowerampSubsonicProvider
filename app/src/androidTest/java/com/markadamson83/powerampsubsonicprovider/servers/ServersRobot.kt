@@ -39,4 +39,10 @@ class ServersVerification constructor(
             .assertIsDisplayed()
     }
 
+    fun noServersMessageIsDisplayed() {
+        val noServersMessage = rule.activity.getString(R.string.no_servers)
+        rule.onNodeWithText(noServersMessage)
+            .assertIsDisplayed()
+    }
+
 }

@@ -17,6 +17,7 @@ fun ServersScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(text = stringResource(id = R.string.servers))
+        Text(text = stringResource(id = R.string.no_servers))
         Button(onClick = onNewServer) {
             Text(text = stringResource(id = R.string.new_server))
         }
