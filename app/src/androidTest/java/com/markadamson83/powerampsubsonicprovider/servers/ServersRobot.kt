@@ -1,9 +1,11 @@
 package com.markadamson83.powerampsubsonicprovider.servers
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -46,6 +48,12 @@ class ServersVerification constructor(
         val noServersMessage = rule.activity.getString(R.string.no_servers)
         rule.onNodeWithText(noServersMessage)
             .assertIsDisplayed()
+    }
+
+    fun noServersMessageIsNotDisplayed() {
+        val noServersMessage = rule.activity.getString(R.string.no_servers)
+        rule.onAllNodesWithText(noServersMessage)
+            .assertCountEquals(0)
     }
 
     fun serverIsDisplayed(serverName: String) {

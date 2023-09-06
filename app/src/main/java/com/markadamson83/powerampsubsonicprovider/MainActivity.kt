@@ -22,6 +22,7 @@ import com.markadamson83.powerampsubsonicprovider.addserver.AddServerViewModel
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
 import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
 import com.markadamson83.powerampsubsonicprovider.servers.ServersScreen
+import com.markadamson83.powerampsubsonicprovider.servers.ServersViewModel
 import com.markadamson83.powerampsubsonicprovider.ui.theme.PowerampSubsonicProviderTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,6 +30,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : ComponentActivity() {
 
     private val addServerViewModel by viewModel<AddServerViewModel>()
+    private val serversViewModel by viewModel<ServersViewModel>()
 
     companion object {
         private const val ADD_SERVER = "addServer"
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(navController = navController, startDestination = SERVERS) {
                         composable(SERVERS) {
-                            ServersScreen() {
+                            ServersScreen(serversViewModel.apply { getServers() }) {
                                 navController.navigate(ADD_SERVER)
                             }
                         }

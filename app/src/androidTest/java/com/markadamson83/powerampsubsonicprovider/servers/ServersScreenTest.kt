@@ -60,6 +60,18 @@ class ServersScreenTest {
         }
     }
 
+    @Test
+    fun dontDisplayNoServersMessage() {
+        val server = Server("serverId", "serverName", "1.2.3.4", "username", "password")
+        replaceServerStoreWith(InMemoryServerStore(mutableListOf(server)))
+
+        launchServersScreen(serversTestRule) {
+            // no operation
+        } verify {
+            noServersMessageIsNotDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         replaceServerStoreWith(InMemoryServerStore())

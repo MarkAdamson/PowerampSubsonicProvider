@@ -5,6 +5,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerSt
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
+import com.markadamson83.powerampsubsonicprovider.servers.ServersViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -18,5 +19,9 @@ val applicationModule = module {
         serverValidator = get(),
         serverRepository = get(),
         dispatchers = get()
+    ) }
+
+    viewModel { ServersViewModel(
+        serverStore = get(),
     ) }
 }
