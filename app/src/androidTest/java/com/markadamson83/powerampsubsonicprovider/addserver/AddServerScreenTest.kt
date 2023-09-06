@@ -356,9 +356,7 @@ class AddServerScreenTest {
     }
 
     class UnresponsiveServerStore : ServerStore {
-        override fun servers(): List<Server> {
-            TODO("Not yet implemented")
-        }
+        override fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -368,13 +366,15 @@ class AddServerScreenTest {
         ): Server {
             throw UnresponsiveServerException()
         }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
+        }
     }
 
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
-        override fun servers(): List<Server> {
-            TODO("Not yet implemented")
-        }
+        override fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -384,12 +384,14 @@ class AddServerScreenTest {
         ): Server {
             throw BackendException()
         }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
+        }
     }
 
     class OfflineServerStore : ServerStore {
-        override fun servers(): List<Server> {
-            TODO("Not yet implemented")
-        }
+        override fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -399,12 +401,14 @@ class AddServerScreenTest {
         ): Server {
             throw ConnectionUnavailableException()
         }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
+        }
     }
 
     class DelayingServerStore : ServerStore {
-        override fun servers(): List<Server> {
-            TODO("Not yet implemented")
-        }
+        override fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -414,6 +418,10 @@ class AddServerScreenTest {
         ): Server {
             delay(1000)
             return Server("someId", serverName, baseURL, username, password)
+        }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
         }
     }
 }

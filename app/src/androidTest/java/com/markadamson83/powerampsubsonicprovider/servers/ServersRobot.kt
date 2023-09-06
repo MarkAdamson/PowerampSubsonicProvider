@@ -4,7 +4,9 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -30,6 +32,13 @@ class ServersRobot(
     fun clickNewServer() {
         val newServer = rule.activity.getString(R.string.new_server)
         rule.onNodeWithText(newServer)
+            .assertHasClickAction()
+            .performClick()
+    }
+
+    fun deleteServer(serverId: String) {
+        val deleteServer = rule.activity.getString(R.string.delete_server) + "::" + serverId
+        rule.onNodeWithTag(deleteServer)
             .assertHasClickAction()
             .performClick()
     }
@@ -61,6 +70,13 @@ class ServersVerification constructor(
         rule.onNodeWithTag(server)
             .assertIsDisplayed()
             .assert(hasText(serverName))
+    }
+
+    fun serverIsNotDisplayed(serverName: String) {
+        val server = rule.activity.getString(R.string.server)
+        rule.onAllNodesWithTag(server)
+            .filter(hasText(serverName))
+            .assertCountEquals(0)
     }
 
 }

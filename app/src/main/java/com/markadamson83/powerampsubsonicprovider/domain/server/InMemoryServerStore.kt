@@ -2,7 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.domain.server
 
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
 
-class InMemoryServerStore(private val servers: MutableList<Server> = mutableListOf()) :
+class InMemoryServerStore(private var servers: List<Server> = listOf()) :
     ServerStore {
     override fun servers(): List<Server> {
         return servers
@@ -27,12 +27,16 @@ class InMemoryServerStore(private val servers: MutableList<Server> = mutableList
         return server
     }
 
+    override fun deleteServer(serverId: String) {
+        servers = servers.filterNot { it.serverId == serverId }
+    }
+
     private fun createServerIdFor(serverName: String): String {
         return serverName.filterNot { it.isWhitespace() } + "Id"
     }
 
     private fun saveServer(server: Server) {
-        servers.add(server)
+        servers = servers + server
     }
 
 }

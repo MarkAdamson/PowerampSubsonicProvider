@@ -22,4 +22,5 @@
     <string name="new_server">New Server</string>
     <string name="no_servers">You haven\'t configured any servers yet :(</string>
     <string name="server">Server</string>
+    <string name="delete_server">Delete Server</string>
 </resources>

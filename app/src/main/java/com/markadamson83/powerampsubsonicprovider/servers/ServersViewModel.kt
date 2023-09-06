@@ -17,4 +17,9 @@ class ServersViewModel(
     fun getServers() {
         mutableServersState.value = ServersState.Servers(serverStore.servers())
     }
+
+    fun deleteServer(serverId: String) {
+        serverStore.deleteServer(serverId)
+        mutableServersState.value = ServersState.Servers(serverStore.servers())
+    }
 }

@@ -72,6 +72,18 @@ class ServersScreenTest {
         }
     }
 
+    @Test
+    fun deleteServer() {
+        val server = Server("serverId", "serverName", "1.2.3.4", "username", "password")
+        replaceServerStoreWith(InMemoryServerStore(mutableListOf(server)))
+
+        launchServersScreen(serversTestRule) {
+            deleteServer(server.serverId)
+        } verify {
+            serverIsNotDisplayed(server.serverName)
+        }
+    }
+
     @After
     fun tearDown() {
         replaceServerStoreWith(InMemoryServerStore())

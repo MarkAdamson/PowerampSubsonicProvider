@@ -53,6 +53,10 @@ class FailedAddServerTest {
         ): Server {
             throw BackendException()
         }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
+        }
     }
 
     class OfflineServerStore :
@@ -69,6 +73,10 @@ class FailedAddServerTest {
         ): Server {
             throw ConnectionUnavailableException()
         }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
+        }
     }
 
     class UnresponsiveServerStore :
@@ -84,6 +92,10 @@ class FailedAddServerTest {
             password: String
         ): Server {
             throw UnresponsiveServerException()
+        }
+
+        override fun deleteServer(serverId: String) {
+            TODO("Not yet implemented")
         }
     }
 }

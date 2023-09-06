@@ -10,4 +10,6 @@ interface ServerStore {
         username: String,
         password: String
     ): Server
+
+    fun deleteServer(serverId: String)
 }

@@ -37,4 +37,22 @@ class ServersTest {
 
         assertEquals(ServersState.Servers(listOf(demoServer, demoServer2)), viewModel.serversState.value)
     }
+
+    @Test
+    fun deleteServer() {
+        val demoServer = aServer().build()
+        val demoServer2 = aServer().withName("Demo Server 2").build()
+        val viewModel = ServersViewModel(
+            InMemoryServerStore(
+                mutableListOf(
+                    demoServer,
+                    demoServer2
+                )
+            )
+        )
+
+        viewModel.deleteServer(demoServer.serverId)
+
+        assertEquals(ServersState.Servers(listOf(demoServer2)), viewModel.serversState.value)
+    }
 }
