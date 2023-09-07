@@ -2,11 +2,15 @@ package com.markadamson83.powerampsubsonicprovider.servers
 
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.markadamson83.powerampsubsonicprovider.MainActivity
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
+import com.markadamson83.powerampsubsonicprovider.domain.server.RoomDbServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
+import com.markadamson83.powerampsubsonicprovider.roomdb.PSPDatabase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -17,9 +21,13 @@ import org.koin.dsl.module
 typealias MainActivityTestRule = AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
 
 class ServersScreenTest {
+    private val db = Room.inMemoryDatabaseBuilder(
+        ApplicationProvider.getApplicationContext(),
+        PSPDatabase::class.java
+    ).build()
 
     private val addServerModule = module {
-        factory<ServerStore> { InMemoryServerStore() }
+        factory<ServerStore> { RoomDbServerStore(db) }
     }
 
     @get:Rule
@@ -86,7 +94,7 @@ class ServersScreenTest {
 
     @After
     fun tearDown() {
-        replaceServerStoreWith(InMemoryServerStore())
+        replaceServerStoreWith(RoomDbServerStore(db))
     }
 
     private fun replaceServerStoreWith(serverStore: ServerStore) {

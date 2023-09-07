@@ -2,7 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.domain.server
 
 interface ServerStore {
 
-    fun servers(): List<Server>
+    suspend fun servers(): List<Server>
 
     suspend fun createServer(
         serverName: String,
@@ -11,5 +11,5 @@ interface ServerStore {
         password: String
     ): Server
 
-    fun deleteServer(serverId: String)
+    suspend fun deleteServer(serverId: String)
 }

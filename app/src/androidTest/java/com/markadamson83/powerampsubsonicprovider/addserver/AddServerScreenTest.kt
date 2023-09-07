@@ -1,13 +1,16 @@
 package com.markadamson83.powerampsubsonicprovider.addserver
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import com.markadamson83.powerampsubsonicprovider.MainActivity
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.BackendException
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.ConnectionUnavailableException
 import com.markadamson83.powerampsubsonicprovider.domain.exceptions.UnresponsiveServerException
-import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
+import com.markadamson83.powerampsubsonicprovider.domain.server.RoomDbServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
+import com.markadamson83.powerampsubsonicprovider.roomdb.PSPDatabase
 import kotlinx.coroutines.delay
 import org.junit.After
 import org.junit.Before
@@ -17,9 +20,14 @@ import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
 class AddServerScreenTest {
+    private val db = Room.inMemoryDatabaseBuilder(
+        ApplicationProvider.getApplicationContext(),
+        PSPDatabase::class.java
+    ).build()
+
 
     private val addServerModule = module {
-        factory<ServerStore> { InMemoryServerStore() }
+        factory<ServerStore> { RoomDbServerStore(db) }
     }
 
     @get:Rule
@@ -345,7 +353,7 @@ class AddServerScreenTest {
 
     @After
     fun tearDown() {
-        replaceServerStoreWith(InMemoryServerStore())
+        replaceServerStoreWith(RoomDbServerStore(db))
     }
 
     private fun replaceServerStoreWith(serverStore: ServerStore) {
@@ -356,7 +364,7 @@ class AddServerScreenTest {
     }
 
     class UnresponsiveServerStore : ServerStore {
-        override fun servers(): List<Server> = emptyList()
+        override suspend fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -367,14 +375,14 @@ class AddServerScreenTest {
             throw UnresponsiveServerException()
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }
 
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
-        override fun servers(): List<Server> = emptyList()
+        override suspend fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -385,13 +393,13 @@ class AddServerScreenTest {
             throw BackendException()
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }
 
     class OfflineServerStore : ServerStore {
-        override fun servers(): List<Server> = emptyList()
+        override suspend fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -402,13 +410,13 @@ class AddServerScreenTest {
             throw ConnectionUnavailableException()
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }
 
     class DelayingServerStore : ServerStore {
-        override fun servers(): List<Server> = emptyList()
+        override suspend fun servers(): List<Server> = emptyList()
 
         override suspend fun createServer(
             serverName: String,
@@ -420,7 +428,7 @@ class AddServerScreenTest {
             return Server("someId", serverName, baseURL, username, password)
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }

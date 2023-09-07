@@ -1,6 +1,7 @@
 package com.markadamson83.powerampsubsonicprovider.servers
 
 import com.markadamson83.powerampsubsonicprovider.InstantTaskExecutorExtension
+import com.markadamson83.powerampsubsonicprovider.app.TestDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.infrastructure.builder.ServerBuilder.Companion.aServer
 import com.markadamson83.powerampsubsonicprovider.servers.state.ServersState
@@ -11,10 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class ServersTest {
 
+    private val viewModel = ServersViewModel(
+        serverStore = InMemoryServerStore(),
+        dispatchers = TestDispatchers()
+    )
+
     @Test
     fun noServersConfigured() {
-        val viewModel = ServersViewModel()
-
         viewModel.getServers()
 
         assertEquals(ServersState.Servers(emptyList()), viewModel.serversState.value)
@@ -30,7 +34,8 @@ class ServersTest {
                     demoServer,
                     demoServer2
                 )
-            )
+            ),
+            TestDispatchers()
         )
 
         viewModel.getServers()
@@ -48,7 +53,8 @@ class ServersTest {
                     demoServer,
                     demoServer2
                 )
-            )
+            ),
+            TestDispatchers()
         )
 
         viewModel.deleteServer(demoServer.serverId)

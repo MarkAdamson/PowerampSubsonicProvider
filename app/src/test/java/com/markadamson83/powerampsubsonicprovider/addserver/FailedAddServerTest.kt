@@ -41,7 +41,7 @@ class FailedAddServerTest {
 
     class IncorrectUserOrPasswordServerStore :
         ServerStore {
-        override fun servers(): List<Server> {
+        override suspend fun servers(): List<Server> {
             TODO("Not yet implemented")
         }
 
@@ -54,14 +54,14 @@ class FailedAddServerTest {
             throw BackendException()
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }
 
     class OfflineServerStore :
         ServerStore {
-        override fun servers(): List<Server> {
+        override suspend fun servers(): List<Server> {
             TODO("Not yet implemented")
         }
 
@@ -74,14 +74,14 @@ class FailedAddServerTest {
             throw ConnectionUnavailableException()
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }
 
     class UnresponsiveServerStore :
         ServerStore {
-        override fun servers(): List<Server> {
+        override suspend fun servers(): List<Server> {
             TODO("Not yet implemented")
         }
 
@@ -94,7 +94,7 @@ class FailedAddServerTest {
             throw UnresponsiveServerException()
         }
 
-        override fun deleteServer(serverId: String) {
+        override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
         }
     }
