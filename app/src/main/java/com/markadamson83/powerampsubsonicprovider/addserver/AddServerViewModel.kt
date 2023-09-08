@@ -8,11 +8,11 @@ import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.app.CoroutineDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
-import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddServerViewModel(private val serverValidator: ServerValidator,
+class AddServerViewModel(private val serverValidator: BasicServerValidator,
                          private val serverRepository: ServerRepository,
                          private val dispatchers: CoroutineDispatchers
 ) : ViewModel() {

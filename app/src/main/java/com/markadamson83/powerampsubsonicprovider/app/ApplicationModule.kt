@@ -5,7 +5,7 @@ import com.markadamson83.powerampsubsonicprovider.addserver.AddServerViewModel
 import com.markadamson83.powerampsubsonicprovider.domain.server.RoomDbServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
-import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
 import com.markadamson83.powerampsubsonicprovider.roomdb.PSPDatabase
 import com.markadamson83.powerampsubsonicprovider.servers.ServersViewModel
 import org.koin.android.ext.koin.androidContext
@@ -21,7 +21,7 @@ val applicationModule = module {
             "psp-db"
         ).build()
     ) }
-    factory { ServerValidator() }
+    factory { BasicServerValidator() }
     factory { ServerRepository(serverStore = get())}
 
     viewModel { AddServerViewModel(

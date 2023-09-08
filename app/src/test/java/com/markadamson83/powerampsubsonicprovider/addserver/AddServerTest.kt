@@ -6,7 +6,7 @@ import com.markadamson83.powerampsubsonicprovider.app.TestDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
-import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class AddServerTest {
 
-    private val viewModel = AddServerViewModel(ServerValidator(), ServerRepository(InMemoryServerStore()), TestDispatchers())
+    private val viewModel = AddServerViewModel(BasicServerValidator(), ServerRepository(InMemoryServerStore()), TestDispatchers())
 
     @Test
     fun serverAdded() {
