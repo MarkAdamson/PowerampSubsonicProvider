@@ -11,6 +11,7 @@ import com.markadamson83.powerampsubsonicprovider.domain.server.RoomDbServerStor
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 import com.markadamson83.powerampsubsonicprovider.roomdb.PSPDatabase
 import kotlinx.coroutines.delay
@@ -279,6 +280,20 @@ class AddServerScreenTest {
     }
 
     @Test
+    fun displayBadCredentialsError() {
+        replaceValidatorWith(BadCredentialsServerValidator())
+        launchAddServerScreen(addServerTestRule) {
+            typeServerName("Demo Server")
+            typeBaseURL("http://demo.subsonic.org")
+            typeUsername("abc")
+            typePassword("def")
+            submit()
+        } verify {
+            badCredentialsErrorIsDisplayed()
+        }
+    }
+
+    @Test
     fun displayServerUnresponsiveError() {
         replaceServerStoreWith(UnresponsiveServerStore())
 
@@ -354,14 +369,16 @@ class AddServerScreenTest {
         }
     }
 
-    @After
-    fun tearDown() {
-        replaceServerStoreWith(RoomDbServerStore(db))
-    }
-
     private fun replaceServerStoreWith(serverStore: ServerStore) {
         val replaceModule = module {
             factory { serverStore }
+        }
+        loadKoinModules(replaceModule)
+    }
+
+    private fun replaceValidatorWith(validator: ServerValidator) {
+        val replaceModule = module {
+            factory { validator }
         }
         loadKoinModules(replaceModule)
     }
@@ -433,6 +450,18 @@ class AddServerScreenTest {
 
         override suspend fun deleteServer(serverId: String) {
             TODO("Not yet implemented")
+        }
+    }
+
+    class BadCredentialsServerValidator : ServerValidator {
+
+        override suspend fun validate(
+            serverName: String,
+            baseURL: String,
+            username: String,
+            password: String
+        ): ServerValidationResult {
+            return ServerValidationResult.InvalidCredentials
         }
     }
 }

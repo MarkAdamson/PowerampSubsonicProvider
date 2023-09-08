@@ -16,9 +16,7 @@ class SubsonicServerValidator : BasicServerValidator() {
             val server = SubsonicServer(baseURL, username, password)
             val ping = server.ping()
 
-            if (ping.status == "ok") {
-                result = ServerValidationResult.Valid
-            } else {
+            if (ping.status != "ok") {
                 result = ServerValidationResult.InvalidCredentials
             }
         }

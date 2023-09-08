@@ -208,4 +208,10 @@ class AddServerVerification(
         rule.onNodeWithText(offlineError)
             .assertIsDisplayed()
     }
+
+    fun badCredentialsErrorIsDisplayed() {
+        val badCredentialsError = rule.activity.getString(R.string.incorrect_username_or_password)
+        rule.onNodeWithText(badCredentialsError)
+            .assertIsDisplayed()
+    }
 }

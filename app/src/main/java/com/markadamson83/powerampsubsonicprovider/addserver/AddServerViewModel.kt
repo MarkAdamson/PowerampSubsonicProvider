@@ -21,41 +21,37 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
         viewModelScope.launch {
-            val validationResult = withContext(dispatchers.background) {
-                serverValidator.validate(serverName, baseURL, username, password)
+            mutableAddServerState.value = AddServerState.Saving
+
+            mutableAddServerState.value = withContext(dispatchers.background) {
+                when (serverValidator.validate(serverName, baseURL, username, password)) {
+                    is ServerValidationResult.InvalidServerName ->
+                        AddServerState.BadServerName
+                    is ServerValidationResult.InvalidURL ->
+                        AddServerState.BadURL
+                    is ServerValidationResult.InvalidUsername ->
+                        AddServerState.BadUsername
+                    is ServerValidationResult.InvalidPassword ->
+                        AddServerState.BadPassword
+                    is ServerValidationResult.InvalidCredentials ->
+                        AddServerState.BadCredentials
+                    is ServerValidationResult.BackendError ->
+                        AddServerState.BackendError
+                    is ServerValidationResult.Valid ->
+                        performAddServer(serverName, baseURL, username, password)
+                }
             }
 
-            when (validationResult) {
-                is ServerValidationResult.InvalidServerName ->
-                    mutableAddServerState.value = AddServerState.BadServerName
-                is ServerValidationResult.InvalidURL ->
-                    mutableAddServerState.value = AddServerState.BadURL
-                is ServerValidationResult.InvalidUsername ->
-                    mutableAddServerState.value = AddServerState.BadUsername
-                is ServerValidationResult.InvalidPassword ->
-                    mutableAddServerState.value = AddServerState.BadPassword
-                is ServerValidationResult.InvalidCredentials ->
-                    mutableAddServerState.value = AddServerState.BadCredentials
-                is ServerValidationResult.BackendError ->
-                    mutableAddServerState.value = AddServerState.BackendError
-                is ServerValidationResult.Valid ->
-                    performAddServer(serverName, baseURL, username, password)
-            }
         }
     }
 
-    private fun performAddServer(
+    private suspend fun performAddServer(
         serverName: String,
         baseURL: String,
         username: String,
         password: String
-    ) {
-        viewModelScope.launch {
-            mutableAddServerState.value = AddServerState.Saving
-            mutableAddServerState.value = withContext(dispatchers.background) {
-                serverRepository.createAndAddServer(serverName, baseURL, username, password)
-            }
-        }
+    ) : AddServerState {
+            return serverRepository.createAndAddServer(serverName, baseURL, username, password)
     }
 
     fun resetState() {

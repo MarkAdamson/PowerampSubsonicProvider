@@ -85,6 +85,8 @@ fun AddServerScreen(
             toggleInfoMessage(stringResource(R.string.unresponsive_server_error))
         is AddServerState.Offline ->
             toggleInfoMessage(stringResource(R.string.offline_error))
+        is AddServerState.BadCredentials ->
+            toggleInfoMessage(stringResource(R.string.incorrect_username_or_password))
         else -> { }
     }
 

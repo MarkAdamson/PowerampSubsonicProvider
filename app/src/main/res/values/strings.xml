@@ -23,4 +23,5 @@
     <string name="no_servers">You haven\'t configured any servers yet :(</string>
     <string name="server">Server</string>
     <string name="delete_server">Delete Server</string>
+    <string name="incorrect_username_or_password">Incorrect username or password</string>
 </resources>

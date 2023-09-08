@@ -8,13 +8,13 @@ class SubsonicServer constructor(baseURL: String, val username: String, val pass
 
     init {
         api = Retrofit.Builder()
-            .baseUrl(baseURL)
+            .baseUrl(baseURL.contains("://").let { if (it) baseURL else "http://$baseURL" })
             .addConverterFactory(SimpleXmlConverterFactory.create())
             .build()
             .create(SubsonicAPI::class.java)
     }
 
-    suspend fun ping(): SubsonicResponse {
-        return api.ping()
+    suspend fun ping() : SubsonicResponse {
+        return api.ping(username, password)
     }
 }
