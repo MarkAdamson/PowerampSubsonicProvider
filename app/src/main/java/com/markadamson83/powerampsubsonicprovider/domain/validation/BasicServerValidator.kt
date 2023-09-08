@@ -2,8 +2,8 @@ package com.markadamson83.powerampsubsonicprovider.domain.validation
 
 import androidx.core.util.PatternsCompat
 
-class BasicServerValidator : ServerValidator {
-    override fun validate(
+open class BasicServerValidator : ServerValidator {
+    override suspend fun validate(
         serverName: String,
         baseURL: String,
         username: String,

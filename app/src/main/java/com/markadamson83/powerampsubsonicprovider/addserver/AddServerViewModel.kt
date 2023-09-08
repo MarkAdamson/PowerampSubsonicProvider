@@ -8,11 +8,11 @@ import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.app.CoroutineDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
-import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddServerViewModel(private val serverValidator: BasicServerValidator,
+class AddServerViewModel(private val serverValidator: ServerValidator,
                          private val serverRepository: ServerRepository,
                          private val dispatchers: CoroutineDispatchers
 ) : ViewModel() {
@@ -20,17 +20,27 @@ class AddServerViewModel(private val serverValidator: BasicServerValidator,
     val addServerState: LiveData<AddServerState> = mutableAddServerState
 
     fun addServer(serverName: String, baseURL: String, username: String, password: String) {
-        when (serverValidator.validate(serverName, baseURL, username, password)) {
-            is ServerValidationResult.InvalidServerName ->
-                mutableAddServerState.value = AddServerState.BadServerName
-            is ServerValidationResult.InvalidURL ->
-                mutableAddServerState.value = AddServerState.BadURL
-            is ServerValidationResult.InvalidUsername ->
-                mutableAddServerState.value = AddServerState.BadUsername
-            is ServerValidationResult.InvalidPassword ->
-                mutableAddServerState.value = AddServerState.BadPassword
-            is ServerValidationResult.Valid ->
-                performAddServer(serverName, baseURL, username, password)
+        viewModelScope.launch {
+            val validationResult = withContext(dispatchers.background) {
+                serverValidator.validate(serverName, baseURL, username, password)
+            }
+
+            when (validationResult) {
+                is ServerValidationResult.InvalidServerName ->
+                    mutableAddServerState.value = AddServerState.BadServerName
+                is ServerValidationResult.InvalidURL ->
+                    mutableAddServerState.value = AddServerState.BadURL
+                is ServerValidationResult.InvalidUsername ->
+                    mutableAddServerState.value = AddServerState.BadUsername
+                is ServerValidationResult.InvalidPassword ->
+                    mutableAddServerState.value = AddServerState.BadPassword
+                is ServerValidationResult.InvalidCredentials ->
+                    mutableAddServerState.value = AddServerState.BadCredentials
+                is ServerValidationResult.BackendError ->
+                    mutableAddServerState.value = AddServerState.BackendError
+                is ServerValidationResult.Valid ->
+                    performAddServer(serverName, baseURL, username, password)
+            }
         }
     }
 

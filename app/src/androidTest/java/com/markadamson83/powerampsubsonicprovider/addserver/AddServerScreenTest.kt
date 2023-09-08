@@ -10,6 +10,8 @@ import com.markadamson83.powerampsubsonicprovider.domain.exceptions.Unresponsive
 import com.markadamson83.powerampsubsonicprovider.domain.server.RoomDbServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.Server
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerStore
+import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidator
 import com.markadamson83.powerampsubsonicprovider.roomdb.PSPDatabase
 import kotlinx.coroutines.delay
 import org.junit.After
@@ -28,6 +30,7 @@ class AddServerScreenTest {
 
     private val addServerModule = module {
         factory<ServerStore> { RoomDbServerStore(db) }
+        factory<ServerValidator> { BasicServerValidator() }
     }
 
     @get:Rule

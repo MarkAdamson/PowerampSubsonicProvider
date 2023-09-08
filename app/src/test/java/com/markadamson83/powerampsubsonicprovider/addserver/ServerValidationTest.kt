@@ -5,8 +5,9 @@ import com.markadamson83.powerampsubsonicprovider.addserver.state.AddServerState
 import com.markadamson83.powerampsubsonicprovider.app.TestDispatchers
 import com.markadamson83.powerampsubsonicprovider.domain.server.InMemoryServerStore
 import com.markadamson83.powerampsubsonicprovider.domain.server.ServerRepository
-import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
 import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
+import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -52,7 +53,7 @@ class ServerValidationTest {
     }
 
     @Test
-    fun validServer() {
+    fun validServer() = runBlocking {
         val result = BasicServerValidator().validate("Demo Server", "http://demo.subsonic.org", "guest1", "guest")
         assertEquals(ServerValidationResult.Valid, result)
     }
