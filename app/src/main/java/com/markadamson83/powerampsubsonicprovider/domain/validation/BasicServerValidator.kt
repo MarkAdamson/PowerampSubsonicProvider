@@ -11,7 +11,10 @@ open class BasicServerValidator : ServerValidator {
     ): ServerValidationResult {
         return if (serverName.isEmpty()) {
             ServerValidationResult.InvalidServerName
-        } else if (!PatternsCompat.WEB_URL.matcher(baseURL).matches()) {
+        } else if (
+            !PatternsCompat.WEB_URL.matcher(baseURL).matches() or
+            (baseURL.contains("://") and !(baseURL.startsWith("http://") or baseURL.startsWith("https://")))
+        ) {
             ServerValidationResult.InvalidURL
         } else if (username.isEmpty()) {
             ServerValidationResult.InvalidUsername

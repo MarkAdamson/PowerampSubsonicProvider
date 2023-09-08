@@ -30,7 +30,8 @@ class ServerValidationTest {
     @CsvSource(
         "''",
         "'url'",
-        "'http://'"
+        "'http://'",
+        "'ftp://demo.subsonic.org'",
     )
     fun invalidURL(url: String) {
         viewModel.addServer(":serverName:", url, ":username:", ":password:")
