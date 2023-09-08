@@ -19,8 +19,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.markadamson83.powerampsubsonicprovider.addserver.AddServerScreen
 import com.markadamson83.powerampsubsonicprovider.addserver.AddServerViewModel
-import com.markadamson83.powerampsubsonicprovider.server.SubsonicResponse
-import com.markadamson83.powerampsubsonicprovider.server.SubsonicServer
+import com.markadamson83.powerampsubsonicprovider.subsonic.SubsonicResponse
+import com.markadamson83.powerampsubsonicprovider.subsonic.SubsonicServer
 import com.markadamson83.powerampsubsonicprovider.servers.ServersScreen
 import com.markadamson83.powerampsubsonicprovider.servers.ServersViewModel
 import com.markadamson83.powerampsubsonicprovider.ui.theme.PowerampSubsonicProviderTheme

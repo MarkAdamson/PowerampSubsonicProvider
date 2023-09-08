@@ -1,4 +1,4 @@
-package com.markadamson83.powerampsubsonicprovider.server
+package com.markadamson83.powerampsubsonicprovider.subsonic
 
 import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Root

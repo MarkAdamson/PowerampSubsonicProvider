@@ -1,4 +1,4 @@
-package com.markadamson83.powerampsubsonicprovider.server
+package com.markadamson83.powerampsubsonicprovider.subsonic
 
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
