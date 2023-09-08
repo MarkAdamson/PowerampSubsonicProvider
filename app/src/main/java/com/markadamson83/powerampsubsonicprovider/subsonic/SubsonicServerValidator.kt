@@ -2,6 +2,7 @@ package com.markadamson83.powerampsubsonicprovider.subsonic
 
 import com.markadamson83.powerampsubsonicprovider.domain.validation.BasicServerValidator
 import com.markadamson83.powerampsubsonicprovider.domain.validation.ServerValidationResult
+import java.net.SocketTimeoutException
 
 class SubsonicServerValidator : BasicServerValidator() {
     override suspend fun validate(
@@ -14,10 +15,17 @@ class SubsonicServerValidator : BasicServerValidator() {
 
         if (result == ServerValidationResult.Valid) {
             val server = SubsonicServer(baseURL, username, password)
-            val ping = server.ping()
 
-            if (ping.status != "ok") {
-                result = ServerValidationResult.InvalidCredentials
+            result = try {
+                val ping = server.ping()
+
+                if (ping.status != "ok") {
+                    ServerValidationResult.InvalidCredentials
+                } else {
+                    ServerValidationResult.Valid
+                }
+            } catch (e: SocketTimeoutException) {
+                ServerValidationResult.Timeout
             }
         }
 

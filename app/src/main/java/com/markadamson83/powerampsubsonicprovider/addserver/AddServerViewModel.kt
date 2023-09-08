@@ -37,6 +37,8 @@ class AddServerViewModel(private val serverValidator: ServerValidator,
                         AddServerState.BadCredentials
                     is ServerValidationResult.BackendError ->
                         AddServerState.BackendError
+                    is ServerValidationResult.Timeout ->
+                        AddServerState.UnresponsiveServer
                     is ServerValidationResult.Valid ->
                         performAddServer(serverName, baseURL, username, password)
                 }

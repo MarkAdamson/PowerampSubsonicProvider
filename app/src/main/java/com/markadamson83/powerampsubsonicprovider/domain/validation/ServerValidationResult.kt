@@ -8,4 +8,5 @@ sealed class ServerValidationResult {
     object InvalidCredentials : ServerValidationResult()
     object BackendError : ServerValidationResult()
     object Valid : ServerValidationResult()
+    object Timeout : ServerValidationResult()
 }
